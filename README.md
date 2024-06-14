@@ -1,4 +1,4 @@
-<h3>EnJambment<em>Work In Progress</em></h3>
+<h3>EnJambment (<em>Work In Progress</em>)</h3>
 <p>
 EnJambment is a web app that simplifies the process for window technician companies to manage their portfolio of projects and tasks. The goal of the app is to provide an easy-to-use interface for the window technician companies to assign projects and tasks, for technicians to conveniently provide updates on their assignments, and for clients to view the status of their projects.
 </p>
