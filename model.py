@@ -18,19 +18,21 @@ class User(db.Model):
     lname = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String, nullable=False)
+    team = db.Column(db.String, nullable=False)
     role = db.Column(db.String, nullable=False)
 
     user_projects = db.relationship("UserProject", back_populates="user")
     user_task = db.relationship("UserTask", back_populates="user")
 
     def __repr__(self):
-        return f'<User user_id={self.user_id} fname={self.fname} lname={self.lname} email={self.email} role={self.role}>'
+        return f'<User user_id={self.user_id} fname={self.fname} lname={self.lname} email={self.email} team={self.team} role={self.role}>'
     
     def to_dict(self):
         return {'user_id': self.user_id,
                 'fname': self.fname,
                 'lname': self.lname,
                 'email': self.email,
+                'team': self.team,
                 'role': self.role
                 }
 

@@ -8,20 +8,32 @@ import datetime
 
 # USER-RELATED
 
-def create_user(fname, lname, email, password, role):
+def create_user(fname, lname, email, password, team, role):
     """Create and return a new user."""
 
-    return User(fname=fname, lname=lname, email=email, password=password, role=role)
+    return User(fname=fname, lname=lname, email=email, password=password, team=team, role=role)
     
 def get_user_by_id(user_id):
     """Return user info by id"""
 
     return User.query.get(user_id)
 
+    # user = User.query.get(user_id)
+    # if user:
+    #     print(f"User found: {user}")
+    # else:
+    #     print("User not found")
+    # return user
+
 def get_user_by_email(email):
     """Return a user with inputted email"""
 
     return User.query.filter(User.email == email).first()
+
+def get_members_by_team(team):
+    """Return a list of users on a specific team"""
+
+    return User.query.filter(User.team == team).all()
 
 
 # USERPROJECT-RELATED
