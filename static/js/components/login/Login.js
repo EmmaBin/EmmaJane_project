@@ -1,6 +1,5 @@
-
-
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Login.css';
 import { PiEye, PiEyeClosed } from "react-icons/pi";
 
@@ -14,18 +13,38 @@ export default function Login() {
     const [isFormValid, setIsFormValid] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+    const navigate = useNavigate();
+
     useEffect(() => {
         setIsFormValid(validate());
     }, [logInfo]);
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
         setIsSubmitted(true);
         if (isFormValid) {
             console.log("Logging in with:", logInfo.email, logInfo.password);
-            // send login request to server
+            try {
+                let newUser = await fetch("/login", {
+                    method: "POST",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: logInfo.email,
+                        password: logInfo.password
+                    }),
+                });
+                let response = await newUser.json();
+                console.log("Here is the response from server", response);
+                navigate('/dashboard');
+            } catch (error) {
+                console.error("Error during login:", error);
+            }
         }
     };
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
