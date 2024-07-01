@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import './Login.css';
+import { PiEye, PiEyeClosed } from "react-icons/pi";
 
 export default function Login() {
     const [logInfo, setLogInfo] = useState({
@@ -12,7 +13,7 @@ export default function Login() {
     const [touched, setTouched] = useState({});
     const [isFormValid, setIsFormValid] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
-
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     useEffect(() => {
         setIsFormValid(validate());
     }, [logInfo]);
@@ -35,6 +36,10 @@ export default function Login() {
         const { name } = e.target;
         setTouched({ ...touched, [name]: true });
         validate();
+    };
+
+    const togglePasswordVisibility = () => {
+        setIsPasswordVisible(!isPasswordVisible);
     };
 
     const validate = () => {
@@ -81,17 +86,23 @@ export default function Login() {
                     <div>
                         <label>Password</label>
                     </div>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={logInfo.password}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        placeholder="Your password"
-                        aria-label="Password"
-                        className={`password ${errors.password && touched.password ? 'error' : ''}`}
-                    />
+                    <div className="password-container">
+                        <input
+                            type={isPasswordVisible ? "text" : "password"}
+                            id="password"
+                            name="password"
+                            value={logInfo.password}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            placeholder="Your password"
+                            aria-label="Password"
+                            className={`password ${errors.password && touched.password ? 'error' : ''}`}
+                        />
+                        <span className="password-toggle-icon" onClick={togglePasswordVisibility}>
+                            {isPasswordVisible ? <PiEyeClosed /> : <PiEye />}
+                        </span>
+                    </div>
+
                     {errors.password && touched.password && <div className="error-message">{errors.password}</div>}
                     <div className="forgot-password-container">
                         <a href="#" className="forgot-password">Forgot password?</a>
@@ -100,7 +111,7 @@ export default function Login() {
                 <button type="submit" className={`login-btn ${isFormValid ? 'active' : ''}`}>Log in</button>
             </form>
             <div className="signup">
-                I’m a new user. <a href="#">Sign up</a>
+                I’m a new user. <a href="#"> Sign up</a>
             </div>
         </div>
     );
