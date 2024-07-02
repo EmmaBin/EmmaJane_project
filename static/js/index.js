@@ -4,7 +4,7 @@ import { createRoot } from 'react-dom/client';
 
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import NewProject from './components/project/NewProject';
+import Profile from './components/profile/Profile';
 
 
 import Login from './components/login/Login';
@@ -17,7 +17,7 @@ function App() {
         <Router>
             <Routes>
                 <Route path="/" element={<Login />} />
-                <Route path="/dashboard" element={<NewProject />} />
+                <Route path="/dashboard" element={<Profile />} />
             </Routes>
         </Router>
         // <div>
