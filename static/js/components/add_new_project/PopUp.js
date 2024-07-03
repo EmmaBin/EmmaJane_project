@@ -18,19 +18,22 @@ const style = {
 
 export default function BasicModal() {
   const [open, setOpen] = React.useState(false);
+  const [members, setMembers] = React.useState([]);
+  
+  
   const handleOpen = async (evt) => {
     setOpen(true);
-    let memberList = await fetch("/team_members", {
-        method: "GET",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            team: team
-        }),
-    });
+    const fetchMembers = () => {
+        fetch("/team_members")
+        .then((response) => response.json())
+        .then((result) => {
+          setMembers(result);
+        console.log(members)
+        });
+    }
   };
+
+
   const handleClose = () => setOpen(false);
 
   return (

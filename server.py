@@ -97,6 +97,17 @@ def profile():
         
     return jsonify({"error": "Unauthorized"}), 401
 
+@app.route("/team_members", methods=['GET'])
+def members():
+    """Show all team members"""
+
+    # team = request.json.get('team')
+    team = 1 # Testing only, use above later
+
+    members = crud.get_members_by_team(team)
+
+    return jsonify({member.user_id: member.to_dict() for member in members})
+
 
 if __name__ == "__main__":
     connect_to_db(app)
