@@ -1,11 +1,14 @@
 from flask import (Flask, render_template, request, flash, session,
                    redirect, jsonify)
+# from flask_session import Session
+
 from model import connect_to_db, db
 import crud
 import datetime
 import os
 
 app = Flask(__name__)
+app.secret_key = os.environ["EmmaJane5678"]
 app.config['DEBUG'] = True
 
 @app.route("/")
@@ -34,8 +37,8 @@ def login():
         print("The user is in database")
         if user.password == password:
             
-            # session['user'] = user.user_id
-            # return redirect("/")
+            session['user'] = user.user_id
+
             return jsonify({
                 "id": user.user_id,
                 "fname": user.fname,
@@ -73,6 +76,26 @@ def register():
                 "id": user.user_id,
                 "email": user.email
             })
+
+@app.route("/dashboard", methods=['GET'])
+def profile():
+    """Profile"""
+
+    user_id = session.get('user')
+    if user_id:
+        user = crud.get_user_by_id(user_id)
+        if user:
+            return jsonify({
+                "id": user.user_id,
+                "fname": user.fname,
+                "lname": user.lname,
+                "email": user.email,
+                "team": user.team
+                # "current_projects": user.current_projects,  # Assuming these fields exist
+                # "previous_projects": user.previous_projects  # Assuming these fields exist
+            }), 200
+        
+    return jsonify({"error": "Unauthorized"}), 401
 
 
 if __name__ == "__main__":

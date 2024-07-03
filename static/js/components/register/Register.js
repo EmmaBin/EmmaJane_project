@@ -114,7 +114,6 @@ export default function Register() {
                         placeholder="Team" aria-label="Team" />
                 </div>
                 <input type="submit" value="Submit" />
-                {/* <ReactRouterDOM.Link to='/login'>Login</ReactRouterDOM.Link> */}
             </form>
         </div>
 

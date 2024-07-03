@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import PopUp from './PopUp';
+
 
 const NewProject = () => {
     const { fname } = useParams();
@@ -7,6 +9,7 @@ const NewProject = () => {
         pname: "",
         address:""
     });
+    const [isPopUpOpen, setIsPopUpOpen] = useState(false);
     
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -17,6 +20,12 @@ const NewProject = () => {
         e.preventDefault();
         console.log(projectInfo.pname, projectInfo.address)
     }
+
+    const handleAddMembers = (e) => {
+        e.preventDefault();
+        console.log(projectInfo.pname, projectInfo.address);
+        setIsPopUpOpen(true); 
+    };
     
     return (
         <div>
@@ -43,8 +52,14 @@ const NewProject = () => {
                         onChange={handleChange}
                         placeholder="Project address" aria-label="Project address" />
                 </div>
+                <div>
+                    <label>Team</label>
+                    <PopUp />
+ 
+                </div>
                 <input type="submit" value="Submit" />
             </form>
+  
         </div>
     );
 };
