@@ -21,6 +21,7 @@ export default function BasicModal() {
   const { team } = React.useContext(AppContext);
   const [open, setOpen] = React.useState(false);
   const [members, setMembers] = React.useState([]);
+  const { checkedMembers, setCheckedMembers } = React.useContext(AppContext)
 
 
   const handleOpen = async () => {
@@ -50,6 +51,23 @@ export default function BasicModal() {
 
   const handleClose = () => setOpen(false);
 
+  const handleCheckboxChange = (member) => {
+    setCheckedMembers((prevCheckedMembers) => {
+      const isChecked = prevCheckedMembers.some((m) => m.user_id === member.user_id);
+      if (isChecked) {
+        return prevCheckedMembers.filter((m) => m.user_id !== member.user_id);
+      } else {
+        return [...prevCheckedMembers, member];
+      }
+    });
+    console.log("!!!checked box changed", checkedMembers)
+  };
+
+  const isChecked = (userId) => {
+    return checkedMembers.some((m) => m.user_id === userId);
+
+  };
+
   return (
     <div>
       <Button onClick={handleOpen}>Add Members</Button>
@@ -68,7 +86,8 @@ export default function BasicModal() {
               <Box key={member.user_id} display="flex" alignItems="center" justifyContent="space-between" mb={1}>
                 <Typography>{member.fname} {member.lname}</Typography>
                 <Typography>{member.role}</Typography>
-                <input type="checkbox" />
+                <input type="checkbox" checked={isChecked(member.user_id)}
+                  onChange={() => handleCheckboxChange(member)} />
               </Box>
             ))}
           </Box>
@@ -79,21 +98,7 @@ export default function BasicModal() {
           </Box>
         </Box>
       </Modal>
-      {/* <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
-        </Box>
-      </Modal> */}
+
     </div>
   );
 }

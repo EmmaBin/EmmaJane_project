@@ -1,32 +1,42 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import PopUp from './PopUp';
+import { AppContext } from '../../AppContext';
 
 
 const NewProject = () => {
+    const { checkedMembers, setCheckedMembers } = React.useContext(AppContext);
     const { fname } = useParams();
     const [projectInfo, setProjectInfo] = React.useState({
         pname: "",
-        address:""
+        address: ""
     });
     const [isPopUpOpen, setIsPopUpOpen] = useState(false);
-    
+
+    const handleRemove = (userId) => {
+        setCheckedMembers((prevCheckedMembers) =>
+            prevCheckedMembers.filter((member) => member.user_id !== userId)
+        );
+    };
+
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setProjectInfo({ ...projectInfo, [name]: value });
     };
 
-    function handleSubmit(e){
+    function handleSubmit(e) {
         e.preventDefault();
         console.log(projectInfo.pname, projectInfo.address)
+        console.log("get from new project component", checkedMembers)
     }
 
     const handleAddMembers = (e) => {
         e.preventDefault();
         console.log(projectInfo.pname, projectInfo.address);
-        setIsPopUpOpen(true); 
+        setIsPopUpOpen(true);
     };
-    
+
     return (
         <div>
             <h1>Add new project for {fname}</h1>
@@ -55,11 +65,32 @@ const NewProject = () => {
                 <div>
                     <label>Team</label>
                     <PopUp />
- 
+
                 </div>
                 <input type="submit" value="Submit" />
+
+                {checkedMembers && checkedMembers.length > 0 &&
+                    checkedMembers.map((member) => (
+                        <div className="member-item" key={member.user_id}>
+                            <div className="member-info">
+                                <div className="member-name">{member.fname} {member.lname}</div>
+                                <div className="member-role">{member.role}</div>
+                            </div>
+                            <button
+                                className="remove-button"
+                                onClick={() => handleRemove(member.user_id)}
+                            >
+                                Remove
+                            </button>
+                        </div>
+                    ))
+                }
+
+
+
+
             </form>
-  
+
         </div>
     );
 };
