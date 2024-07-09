@@ -1,13 +1,14 @@
 // components/Register.js
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { AppContext } from '../../AppContext';
 
 export default function Register() {
     const [fname, setFName] = React.useState("");
     const [lname, setLName] = React.useState("");
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("")
-    const [team, setTeam] = React.useState("");
     const [role, setRole] = React.useState("");
+    const { team, setTeam } = React.useContext(AppContext);
 
 
     const [values, setValues] = React.useState({

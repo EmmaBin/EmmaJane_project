@@ -43,7 +43,8 @@ def login():
                 "id": user.user_id,
                 "fname": user.fname,
                 "lname": user.lname,
-                "email": user.email
+                "email": user.email,
+                "team": user.team
             })
             
         else:
@@ -74,7 +75,8 @@ def register():
         db.session.commit()
         return jsonify({
                 "id": user.user_id,
-                "email": user.email
+                "email": user.email,
+                "team": user.team
             })
 
 @app.route("/dashboard", methods=['GET'])
@@ -101,12 +103,24 @@ def profile():
 def members():
     """Show all team members"""
 
-    # team = request.json.get('team')
-    team = 1 # Testing only, use above later
+    # Get the team number from the query parameters
+    team = request.args.get('team')
+    
+    if not team:
+        return jsonify({"error": "Team number is required"}), 400
 
+    # Log the team value
+    print(f"Fetching members for team: {team}")
+
+    # Get members from the database based on the team number
     members = crud.get_members_by_team(team)
 
+    # Print members before returning
+    print("Members fetched from database:", members)
+
+    # Convert members to a dictionary and return as JSON
     return jsonify({member.user_id: member.to_dict() for member in members})
+
 
 
 if __name__ == "__main__":
