@@ -10,6 +10,7 @@ import ProfileCard from './components/profile/ProfileCard';
 import Login from './components/login/Login';
 import Register from './components/register/Register';
 import NewProject from './components/add_new_project/NewProject'
+import { AppProvider } from './AppContext';
 
 const root = createRoot(document.getElementById('main'));
 
@@ -26,7 +27,11 @@ function App() {
     );
 }
 
-root.render(<App />);
+root.render(
+    <AppProvider>
+        <App />
+    </AppProvider>
+);
 
 
 

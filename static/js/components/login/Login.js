@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AppContext } from '../../AppContext';
 import './Login.css';
 import { PiEye, PiEyeClosed } from "react-icons/pi";
 
@@ -14,6 +15,7 @@ export default function Login() {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const navigate = useNavigate();
+    const { setTeam } = useContext(AppContext);
 
     useEffect(() => {
         setIsFormValid(validate());
@@ -38,6 +40,10 @@ export default function Login() {
                 });
                 let response = await newUser.json();
                 console.log("Here is the response from server", response);
+                // save team value
+                if (response.team) {
+                    setTeam(response.team);
+                }
                 navigate('/dashboard');
             } catch (error) {
                 console.error("Error during login:", error);
@@ -130,7 +136,7 @@ export default function Login() {
                 <button type="submit" className={`login-btn ${isFormValid ? 'active' : ''}`}>Log in</button>
             </form>
             <div className="signup">
-                I’m a new user. <a href="#"> Sign up</a>
+                I’m a new user. <a href="/register"> Sign up</a>
             </div>
         </div>
     );

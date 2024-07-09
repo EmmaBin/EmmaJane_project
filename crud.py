@@ -33,7 +33,7 @@ def get_user_by_email(email):
 def get_members_by_team(team):
     """Return a list of users on a specific team"""
 
-    return User.query.filter(User.team == team).all()
+    return User.query.filter(User.team == str(team)).all()
 
 
 # USERPROJECT-RELATED
