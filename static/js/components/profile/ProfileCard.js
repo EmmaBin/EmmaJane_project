@@ -53,7 +53,11 @@ const ProfileCard = () => {
             <div className="projects">
                 <div className="current-projects">
                     <details>
-                        <summary>Current Projects</summary>
+                        <summary className="project-title">
+                            Current Projects
+                            <span className="project-arrow"></span>
+                        </summary>
+
                         <ul>
                             <li>Current Project 1</li>
                             <li>Current Project 2</li>
@@ -62,7 +66,10 @@ const ProfileCard = () => {
                 </div>
                 <div className="previous-projects">
                     <details>
-                        <summary>Previous Projects</summary>
+                        <summary className="project-title">
+                            Previous Projects
+                            <span className="project-arrow"></span>
+                        </summary>
                         <ul>
                             <li>Previous Project 1</li>
                             <li>Previous Project 2</li>

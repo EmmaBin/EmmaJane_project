@@ -11,7 +11,7 @@
 
 .profile-image-container {
     position: relative;
-    display: inline-block;
+    margin-bottom: 10px;
 }
 
 .profile-image {
@@ -28,9 +28,7 @@
     background-color: blue;
     border-radius: 50%;
     width: 26px;
-    /* Adjust the width */
     height: 26px;
-    /* Adjust the height */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -38,4 +36,71 @@
 
 .custom-icon {
     color: white;
+}
+
+
+
+.profile-info h2 {
+    font-size: 24px;
+}
+
+.profile-info p {
+    font-size: 16px;
+    color: #B1B1B1;
+}
+
+
+
+.projects {
+    width: 80%;
+}
+
+.summary-container {
+    font-size: 16px;
+    color: #B1B1B1;
+}
+
+.current-projects,
+.previous-projects {
+    margin-bottom: 20px;
+}
+
+.summary-container {
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    color: #59606F;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #B1B1B1;
+    position: relative;
+}
+
+
+.project-arrow::before {
+    content: '';
+    border: solid #535967;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(45deg);
+    transition: transform 0.3s ease;
+}
+
+details[open] .project-arrow::before {
+    transform: rotate(-135deg);
+}
+
+.add-project-button {
+    margin-top: 20px;
+    padding: 10px 15px;
+    background-color: #077EE8;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
