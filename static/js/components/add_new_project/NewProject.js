@@ -25,11 +25,28 @@ const NewProject = () => {
         setProjectInfo({ ...projectInfo, [name]: value });
     };
 
-    function handleSubmit(e) {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(projectInfo.pname, projectInfo.address)
-        console.log("get from new project component", checkedMembers)
-    }
+        console.log(projectInfo.pname, projectInfo.address);
+        console.log("get from new project component", checkedMembers);
+
+        try {
+            await fetch("/add_new_project", {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    pname: projectInfo.pname,
+                    address: projectInfo.address,
+                    members: checkedMembers
+                }),
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const handleAddMembers = (e) => {
         e.preventDefault();

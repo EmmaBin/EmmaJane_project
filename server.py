@@ -122,6 +122,36 @@ def members():
     return jsonify({member.user_id: member.to_dict() for member in members})
 
 
+@app.route('/add_new_project', methods= ['POST'])
+def add_project():
+    """Create userproject instance"""
+
+    pname = request.json.get('pname')
+    address = request.json.get('address')
+    
+    project = crud.create_new_project(pname, address)
+    db.session.add(project)
+    db.session.commit()
+
+    members = request.json.get('members')
+    userprojects = []
+
+
+    for member in members:
+        user_id = member.get('user_id')
+        userproject = crud.create_userproject(user_id, project.project_id)
+        db.session.add(userproject)
+        userprojects.append(userproject)
+
+    for up in userprojects:
+        print(up)
+
+    # Commit all changes to the database
+    db.session.commit()
+
+    return jsonify({"message": "Project created successfully"}), 201
+
+
 
 if __name__ == "__main__":
     connect_to_db(app)

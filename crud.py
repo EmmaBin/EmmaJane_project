@@ -36,7 +36,20 @@ def get_members_by_team(team):
     return User.query.filter(User.team == str(team)).all()
 
 
+# PROJECT-RELATED
+
+def create_new_project(pname, address):
+    """Create new project"""
+
+    return Project(pname=pname, address=address)
+
+
 # USERPROJECT-RELATED
+
+def create_userproject(user_id, project_id):
+    """Create userproject"""
+
+    return UserProject(user_id=user_id, project_id=project_id)
 
 def get_projects_by_user_id(user_id):
     """Return all projects of a user id"""
