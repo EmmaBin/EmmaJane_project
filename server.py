@@ -11,6 +11,7 @@ app = Flask(__name__)
 app.secret_key = os.environ["EmmaJane5678"]
 app.config['DEBUG'] = True
 
+
 @app.route("/")
 def homepage():
     """Homepage"""
@@ -20,7 +21,7 @@ def homepage():
 
 @app.route("/<path>")
 def path(path):
-    
+
     return render_template("homepage.html")
 
 
@@ -36,7 +37,7 @@ def login():
     if user:
         print("The user is in database")
         if user.password == password:
-            
+
             session['user'] = user.user_id
 
             return jsonify({
@@ -46,7 +47,7 @@ def login():
                 "email": user.email,
                 "team": user.team
             })
-            
+
         else:
             return "", "401 Incorrect password."
 
@@ -68,16 +69,17 @@ def register():
     user = crud.get_user_by_email(email)
 
     if user:
-        return jsonify({'error': 'Sorry, that email is already being used. Please try again with a different email.' }), 401
+        return jsonify({'error': 'Sorry, that email is already being used. Please try again with a different email.'}), 401
     else:
         user = crud.create_user(fname, lname, email, password, team, role)
         db.session.add(user)
         db.session.commit()
         return jsonify({
-                "id": user.user_id,
-                "email": user.email,
-                "team": user.team
-            })
+            "id": user.user_id,
+            "email": user.email,
+            "team": user.team
+        })
+
 
 @app.route("/dashboard", methods=['GET'])
 def profile():
@@ -92,12 +94,14 @@ def profile():
                 "fname": user.fname,
                 "lname": user.lname,
                 "email": user.email,
-                "team": user.team
+                "team": user.team,
+                "role": user.role
                 # "current_projects": user.current_projects,  # Assuming these fields exist
                 # "previous_projects": user.previous_projects  # Assuming these fields exist
             }), 200
-        
+
     return jsonify({"error": "Unauthorized"}), 401
+
 
 @app.route("/team_members", methods=['GET'])
 def members():
@@ -105,7 +109,7 @@ def members():
 
     # Get the team number from the query parameters
     team = request.args.get('team')
-    
+
     if not team:
         return jsonify({"error": "Team number is required"}), 400
 
@@ -122,20 +126,19 @@ def members():
     return jsonify({member.user_id: member.to_dict() for member in members})
 
 
-@app.route('/add_new_project', methods= ['POST'])
+@app.route('/add_new_project', methods=['POST'])
 def add_project():
     """Create userproject instance"""
 
     pname = request.json.get('pname')
     address = request.json.get('address')
-    
+
     project = crud.create_new_project(pname, address)
     db.session.add(project)
     db.session.commit()
 
     members = request.json.get('members')
     userprojects = []
-
 
     for member in members:
         user_id = member.get('user_id')
@@ -150,7 +153,6 @@ def add_project():
     db.session.commit()
 
     return jsonify({"message": "Project created successfully"}), 201
-
 
 
 if __name__ == "__main__":
