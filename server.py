@@ -130,12 +130,15 @@ def members():
     return jsonify({member.user_id: member.to_dict() for member in members})
 
 
-@app.route('/add_new_project', methods=['POST'])
+@app.route('/project', methods=['POST'])
 def add_project():
     """Create userproject instance"""
 
     pname = request.json.get('pname')
     address = request.json.get('address')
+
+    if not pname or not address:
+        return jsonify({"error": "pname and address are required"}), 400
 
     project = crud.create_new_project(pname, address)
     db.session.add(project)
@@ -144,19 +147,30 @@ def add_project():
     members = request.json.get('members')
     userprojects = []
 
-    for member in members:
-        user_id = member.get('user_id')
-        userproject = crud.create_userproject(user_id, project.project_id)
-        db.session.add(userproject)
-        userprojects.append(userproject)
+    if members:
+        for member in members:
+            user_id = member.get('user_id')
+            if user_id:
+                userproject = crud.create_userproject(user_id, project.project_id)
+                db.session.add(userproject)
+                userprojects.append(userproject)
+            else:
+                print(f"Member without user_id: {member}")
+    # for member in members:
+    #     user_id = member.get('user_id')
+    #     userproject = crud.create_userproject(user_id, project.project_id)
+    #     db.session.add(userproject)
+    #     userprojects.append(userproject)
 
-    for up in userprojects:
-        print(up)
-
-    # Commit all changes to the database
     db.session.commit()
 
-    return jsonify({"message": "Project created successfully"}), 201
+    return jsonify({"project_id": project.project_id}), 201
+
+@app.route('/project/<project_id>', methods=['GET'])
+def tasks_page():
+    """Tasks Page"""
+
+    return jsonify({"Page accessed!"}), 201
 
 
 if __name__ == "__main__":

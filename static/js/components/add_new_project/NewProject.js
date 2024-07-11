@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import PopUp from './PopUp';
 import './NewProject.css';
 import { AppContext } from '../../AppContext';
@@ -13,7 +13,8 @@ const NewProject = () => {
         pname: "",
         address: ""
     });
-    const [isPopUpOpen, setIsPopUpOpen] = useState(false);
+    const navigate = useNavigate();
+    // const [isPopUpOpen, setIsPopUpOpen] = useState(false);
 
     const handleRemove = (userId) => {
         setCheckedMembers((prevCheckedMembers) =>
@@ -37,11 +38,9 @@ const NewProject = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(projectInfo.pname, projectInfo.address);
-        console.log("get from new project component", checkedMembers);
-
+    
         try {
-            await fetch("/add_new_project", {
+            const response = await fetch("/project", {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
@@ -53,16 +52,33 @@ const NewProject = () => {
                     members: checkedMembers
                 }),
             });
+    
+            if (response.ok) {
+                const data = await response.json(); // Await here to get JSON data
+                const projectId = data.project_id;
+                console.log("Project ID:", projectId);
+                setCheckedMembers([]);
+                navigate(`/project/${projectId}`, { 
+                    state: { 
+                        projectId,
+                        pname: projectInfo.pname,
+                        address: projectInfo.address 
+                    } 
+                });
+            } else {
+                console.error('Failed to add new project');
+                return Promise.reject('Failed to add new project');
+            }
         } catch (error) {
             console.error(error);
         }
     };
 
-    const handleAddMembers = (e) => {
-        e.preventDefault();
-        console.log(projectInfo.pname, projectInfo.address);
-        setIsPopUpOpen(true);
-    };
+    // const handleAddMembers = (e) => {
+    //     e.preventDefault();
+    //     console.log(projectInfo.pname, projectInfo.address);
+    //     setIsPopUpOpen(true);
+    // };
 
     return (
         <div>

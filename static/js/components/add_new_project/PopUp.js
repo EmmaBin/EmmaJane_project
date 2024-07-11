@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import './NewProject.css';
+import { IoMdArrowDropdown } from "react-icons/io";
 import { AppContext } from '../../AppContext';
 
 const style = {
@@ -70,10 +71,10 @@ export default function BasicModal() {
   };
 
   return (
-    <div>
+    <div className="team">
       <Button 
         className="add-members" 
-        onClick={handleOpen}>Add Members &darr;
+        onClick={handleOpen}>Add Members <IoMdArrowDropdown />
       </Button>
       <Modal
         open={open}

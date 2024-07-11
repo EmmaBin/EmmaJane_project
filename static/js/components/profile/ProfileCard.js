@@ -25,7 +25,7 @@ const ProfileCard = () => {
 
     const handleAddProject = () => {
         if (user) {
-            navigate(`/${user.fname}/add_new_project`);
+            navigate(`/${user.fname}/project`);
         }
     };
 
@@ -60,23 +60,23 @@ const ProfileCard = () => {
 
                         <ul>
                             <li>
-                                <div class="project-info">
+                                <div className="project-info">
                                     <div className="project-details">
-                                        <div class="project-title">Current Project 1</div>
-                                        <div class="project-location">Location 1</div>
+                                        <div className="project-title">Current Project 1</div>
+                                        <div className="project-location">Location 1</div>
                                     </div>
 
-                                    <button class="view-job-btn">View job</button>
+                                    <button className="view-job-btn">View job</button>
                                 </div>
                             </li>
                             <li>
-                                <div class="project-info">
+                                <div className="project-info">
                                     <div className="project-details">
-                                        <div class="project-title">Current Project 2</div>
-                                        <div class="project-location">Location 2</div>
+                                        <div className="project-title">Current Project 2</div>
+                                        <div className="project-location">Location 2</div>
                                     </div>
 
-                                    <button class="view-job-btn">View job</button>
+                                    <button className="view-job-btn">View job</button>
                                 </div>
                             </li>
                         </ul>
@@ -90,23 +90,23 @@ const ProfileCard = () => {
                         </summary>
                         <ul>
                             <li>
-                                <div class="project-info">
+                                <div className="project-info">
                                     <div className="project-details">
-                                        <div class="project-title">Previous Project 1</div>
-                                        <div class="project-location">Location 1</div>
+                                        <div className="project-title">Previous Project 1</div>
+                                        <div className="project-location">Location 1</div>
                                     </div>
 
-                                    <button class="view-job-btn">View job</button>
+                                    <button className="view-job-btn">View job</button>
                                 </div>
                             </li>
                             <li>
-                                <div class="project-info">
+                                <div className="project-info">
                                     <div className="project-details">
-                                        <div class="project-title">Previous Project 2</div>
-                                        <div class="project-location">Location 2</div>
+                                        <div className="project-title">Previous Project 2</div>
+                                        <div className="project-location">Location 2</div>
                                     </div>
 
-                                    <button class="view-job-btn">View job</button>
+                                    <button className="view-job-btn">View job</button>
                                 </div>
                             </li>
                         </ul>
