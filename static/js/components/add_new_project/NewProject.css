@@ -78,3 +78,7 @@ button.continue-btn.active {
     background-color: transparent;
     color: red;
 }
+
+.team {
+    display: flex;
+}

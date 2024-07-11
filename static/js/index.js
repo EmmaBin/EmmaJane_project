@@ -10,6 +10,7 @@ import ProfileCard from './components/profile/ProfileCard';
 import Login from './components/login/Login';
 import Register from './components/register/Register';
 import NewProject from './components/add_new_project/NewProject'
+import Tasks from './components/tasks/Tasks'
 import { AppProvider } from './AppContext';
 
 const root = createRoot(document.getElementById('main'));
@@ -21,7 +22,9 @@ function App() {
                 <Route path="/" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/dashboard" element={<ProfileCard />} />
-                <Route path="/:fname/add_new_project" element={<NewProject />} />
+                <Route path="/:fname/project" element={<NewProject />} />
+                <Route path="/project/:projectId" element={<Tasks />} />
+
             </Routes>
         </Router>
     );
