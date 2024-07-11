@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
+import './NewProject.css';
 import { AppContext } from '../../AppContext';
 
 const style = {
@@ -70,7 +71,10 @@ export default function BasicModal() {
 
   return (
     <div>
-      <Button onClick={handleOpen}>Add Members</Button>
+      <Button 
+        className="add-members" 
+        onClick={handleOpen}>Add Members &darr;
+      </Button>
       <Modal
         open={open}
         onClose={handleClose}

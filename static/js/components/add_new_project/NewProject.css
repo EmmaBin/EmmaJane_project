@@ -1,0 +1,80 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    padding: 20px;
+    height: 80vh;
+
+}
+
+h2 {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 32px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    color: #606778;
+    font-size: 16px;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+input {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    font-size: 14px;
+    width: 300px;
+}
+
+input::placeholder {
+    color: #ccc;
+}
+
+input:focus {
+    outline: none;
+    border: 2px solid #464CE0;
+    box-shadow: 0 0 5px rgba(70, 76, 224, 0.5);
+
+}
+
+.add-members {
+    align-items: right;
+    border: none;
+}
+
+button.continue-btn {
+    padding: 10px;
+    background-color: #aaa;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+    cursor: not-allowed;
+}
+
+.continue-btn {
+    margin-top: 40px;
+}
+
+button.continue-btn.active {
+    background-color: #077EE8;
+    cursor: pointer;
+}
+
+.remove-button {
+    background-color: transparent;
+    color: red;
+}

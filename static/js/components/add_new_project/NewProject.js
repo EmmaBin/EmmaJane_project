@@ -1,12 +1,14 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import PopUp from './PopUp';
+import './NewProject.css';
 import { AppContext } from '../../AppContext';
 
 
 const NewProject = () => {
     const { checkedMembers, setCheckedMembers } = React.useContext(AppContext);
-    const { fname } = useParams();
+    // const { fname } = useParams();
+    const [isFormValid, setIsFormValid] = useState(false);
     const [projectInfo, setProjectInfo] = React.useState({
         pname: "",
         address: ""
@@ -18,6 +20,14 @@ const NewProject = () => {
             prevCheckedMembers.filter((member) => member.user_id !== userId)
         );
     };
+
+    const validate = () => {
+        return projectInfo.pname.trim() !== '' && projectInfo.address.trim() !== '';
+    };
+
+    useEffect(() => {
+        setIsFormValid(validate());
+    }, [projectInfo]);
 
 
     const handleChange = (e) => {
@@ -56,35 +66,42 @@ const NewProject = () => {
 
     return (
         <div>
-            <h1>Add new project for {fname}</h1>
+            <h2>Add new project</h2>
 
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Job name</label>
+                </div>
+                <div>
                     <input type="text"
                         id="pname"
                         name="pname"
                         required={true}
                         value={projectInfo.pname}
                         onChange={handleChange}
-                        placeholder="Your project name" aria-label="Your project name" />
+                        placeholder="Your project name" 
+                        aria-label="Your project name" 
+                    />
                 </div>
                 <div>
                     <label>Job Address</label>
+                </div>
+                <div>
                     <input type="text"
                         id="address"
                         name="address"
                         required={true}
                         value={projectInfo.address}
                         onChange={handleChange}
-                        placeholder="Project address" aria-label="Project address" />
+                        placeholder="Project address" 
+                        aria-label="Project address" 
+                    />
                 </div>
                 <div>
                     <label>Team</label>
                     <PopUp />
-
                 </div>
-                <input type="submit" value="Submit" />
+                <button type="submit" className={`continue-btn ${isFormValid ? 'active' : ''}`}>Continue</button>
 
                 {checkedMembers && checkedMembers.length > 0 &&
                     checkedMembers.map((member) => (

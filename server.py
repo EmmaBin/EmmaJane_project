@@ -6,9 +6,13 @@ from model import connect_to_db, db
 import crud
 import datetime
 import os
+from dotenv import load_dotenv
+
+
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = os.environ["EmmaJane5678"]
+app.secret_key = os.getenv("EmmaJane5678")
 app.config['DEBUG'] = True
 
 

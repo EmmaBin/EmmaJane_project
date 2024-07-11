@@ -1,0 +1,187 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    padding: 20px;
+    height: 80vh;
+
+}
+
+h2 {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 32px;
+}
+
+.register-div {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    color: #606778;
+    font-size: 16px;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+input {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    font-size: 14px;
+    width: 300px;
+}
+
+input::placeholder {
+    color: #ccc;
+}
+
+input:focus {
+    outline: none;
+    border: 2px solid #464CE0;
+    box-shadow: 0 0 5px rgba(70, 76, 224, 0.5);
+
+}
+
+.error {
+    border: 2px solid #FF0000;
+    box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+}
+
+.error-message {
+    color: #FF0000;
+    font-size: 12px;
+    margin-top: -20px;
+    margin-bottom: 20px;
+}
+
+.email-error {
+    margin-top: -20px;
+    margin-bottom: 20px;
+}
+
+.dropdown-header{
+    font-size: 14px;
+    color: #606778;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+}
+.dropdown-item {
+    border-bottom: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.dropdown-container {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.dropdown-header {
+    cursor: pointer;
+    background-color: transparent;
+}
+
+.dropdown-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    border: 0px;
+    border-radius: 8px;
+    background-color: white;
+    text-align: center;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-item {
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #f0f0f0;
+}
+
+button.create-btn {
+    padding: 10px;
+    background-color: #aaa;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+    cursor: not-allowed;
+}
+
+.create-btn {
+    margin-top: 40px;
+}
+
+button.create-btn.active {
+    background-color: #077EE8;
+    cursor: pointer;
+}
+
+.forgot-password-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.forgot-password {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+.login {
+    margin-top: 20px;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.login a:hover {
+    text-decoration: underline;
+}
+
+.password-container {
+    position: relative;
+    width: 300px;
+}
+
+.password-container input {
+    width: 100%;
+    padding-right: 40px;
+}
+
+.password-toggle-icon {
+    position: absolute;
+    right: 10px;
+    top: 30%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #ccc;
+}
