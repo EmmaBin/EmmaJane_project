@@ -53,32 +53,70 @@ const ProfileCard = () => {
             <div className="projects">
                 <div className="current-projects">
                     <details>
-                        <summary className="project-title">
-                            Current Projects
+                        <summary className="summary-container">
+                            <div className='summary-title'>Current Projects</div>
                             <span className="project-arrow"></span>
                         </summary>
 
                         <ul>
-                            <li>Current Project 1</li>
-                            <li>Current Project 2</li>
+                            <li>
+                                <div class="project-info">
+                                    <div className="project-details">
+                                        <div class="project-title">Current Project 1</div>
+                                        <div class="project-location">Location 1</div>
+                                    </div>
+
+                                    <button class="view-job-btn">View job</button>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="project-info">
+                                    <div className="project-details">
+                                        <div class="project-title">Current Project 2</div>
+                                        <div class="project-location">Location 2</div>
+                                    </div>
+
+                                    <button class="view-job-btn">View job</button>
+                                </div>
+                            </li>
                         </ul>
                     </details>
                 </div>
                 <div className="previous-projects">
                     <details>
-                        <summary className="project-title">
-                            Previous Projects
+                        <summary className="summary-container">
+                            <div className='summary-title'>Previous Projects</div>
                             <span className="project-arrow"></span>
                         </summary>
                         <ul>
-                            <li>Previous Project 1</li>
-                            <li>Previous Project 2</li>
+                            <li>
+                                <div class="project-info">
+                                    <div className="project-details">
+                                        <div class="project-title">Previous Project 1</div>
+                                        <div class="project-location">Location 1</div>
+                                    </div>
+
+                                    <button class="view-job-btn">View job</button>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="project-info">
+                                    <div className="project-details">
+                                        <div class="project-title">Previous Project 2</div>
+                                        <div class="project-location">Location 2</div>
+                                    </div>
+
+                                    <button class="view-job-btn">View job</button>
+                                </div>
+                            </li>
                         </ul>
 
                     </details>
                 </div>
             </div>
-            <button className="add-project-button" onClick={handleAddProject}>Add new project</button>
+            <div className="add-project-button-container">
+                <button className="add-project-button" onClick={handleAddProject}>Add new project</button>
+            </div>
         </div>
     );
 };
