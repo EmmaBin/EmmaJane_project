@@ -28,11 +28,6 @@ export default function Register() {
         setIsFormValid(validate());
     }, [registerInfo, team]);
 
-    // const [values, setValues] = React.useState({
-    //     password: "",
-    //     showPassword: false,
-    // });
-
     const options = ["Office", "Technician", "Client"];
 
     const handleChange = (e) => {
