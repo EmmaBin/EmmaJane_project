@@ -1,5 +1,4 @@
 .profile-card {
-    border: 1px solid #ddd;
     display: flex;
     flex-direction: column;
     width: 80%;
@@ -7,11 +6,12 @@
     align-items: center;
     margin: auto;
 
+
 }
 
 .profile-image-container {
     position: relative;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 .profile-image {
@@ -25,7 +25,7 @@
     position: absolute;
     bottom: -1px;
     right: -2px;
-    background-color: blue;
+    background-color: #0974D4;
     border-radius: 50%;
     width: 26px;
     height: 26px;
@@ -83,7 +83,7 @@
     border: solid #535967;
     border-width: 0 2px 2px 0;
     display: inline-block;
-    padding: 3px;
+    padding: 5px;
     transform: rotate(45deg);
     transition: transform 0.3s ease;
 }
@@ -92,15 +92,85 @@ details[open] .project-arrow::before {
     transform: rotate(-135deg);
 }
 
-.add-project-button {
-    margin-top: 20px;
-    padding: 10px 15px;
+
+
+details ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+details ul li {
+    border-top: 1px solid #eee;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.project-info {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #C1C1C1;
+    width: 100%
+}
+
+.summary-title {
+    font-size: 16px;
+    color: #59606F;
+}
+
+.project-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.project-title {
+    font-size: 16px;
+    color: #535967;
+}
+
+.project-location {
+    font-size: 16px;
+    color: #B1B1B1;
+    margin-left: 10px;
+}
+
+.view-job-btn {
     background-color: #077EE8;
-    color: #fff;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 1;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    display: inline-block;
+    margin-top: 6px;
+    margin-bottom: 10px;
+}
+
+.view-job-btn:hover {
+    background-color: #0056b3;
+}
+
+.add-project-button-container {
+    width: 80%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.add-project-button {
+    margin-top: 40px;
+    padding: 10px 15px;
+    background-color: #DBE0E6;
+    color: #077EE8;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    align-self: flex-start;
+    margin-left: 0;
 }
