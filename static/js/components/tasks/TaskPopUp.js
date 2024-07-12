@@ -22,14 +22,8 @@ export default function BasicModal() {
 
   const handleClose = () => setOpen(false);
 
-  const toggleShapeSelection = (index) => {
-    setSelectedShapes((prevSelectedShapes) => {
-      if (prevSelectedShapes.includes(index)) {
-        return prevSelectedShapes.filter((i) => i !== index);
-      } else {
-        return [...prevSelectedShapes, index];
-      }
-    });
+  const addShape = (index) => {
+    setSelectedShapes((prevSelectedShapes) => [...prevSelectedShapes, index]);
   };
 
   return (
@@ -49,7 +43,7 @@ export default function BasicModal() {
             <div
               key={index}
               className="shape-container"
-              onClick={() => toggleShapeSelection(index)}
+              onClick={() => addShape(index)}
             >
               <img src={shape} alt={`Shape ${index}`} />
               {selectedShapes.includes(index) && (
