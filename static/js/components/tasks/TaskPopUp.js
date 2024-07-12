@@ -3,43 +3,28 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import './Tasks.css';
+import './TasksPopUp.css';
 import { IoMdArrowDropdown } from "react-icons/io";
 import { AppContext } from '../../AppContext';
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
+import rectangle from '../../../images/rectangle.png';
+import sidewayRectangle from '../../../images/sideway_rectangle.png';
+import square from '../../../images/square.png';
+import upperLowerBottom from '../../../images/upper_lower_bottom.png';
 
 export default function BasicModal() {
-
-  const { checkedMembers, setCheckedMembers } = React.useContext(AppContext)
-  //   const { team } = React.useContext(AppContext);
+  const [shapes] = React.useState([rectangle, sidewayRectangle, square, upperLowerBottom]);
+  const { selectedShapes, setSelectedShapes } = React.useContext(AppContext);
   const [open, setOpen] = React.useState(false);
-  //   const [members, setMembers] = React.useState([]);
-  //   const { checkedMembers, setCheckedMembers } = React.useContext(AppContext)
 
-
-  const handleOpen = async () => {
+  const handleOpen = () => {
     setOpen(true);
-    // if (!team) {
-    //   console.error('Team value is missing');
-    //   return;
-  }
-
-
-
+  };
 
   const handleClose = () => setOpen(false);
 
+  const addShape = (index) => {
+    setSelectedShapes((prevSelectedShapes) => [...prevSelectedShapes, index]);
+  };
 
   return (
     <div>
@@ -53,13 +38,21 @@ export default function BasicModal() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Invite to team
-          </Typography>
+        <Box className="modal-box">
+          {shapes.map((shape, index) => (
+            <div
+              key={index}
+              className="shape-container"
+              onClick={() => addShape(index)}
+            >
+              <img src={shape} alt={`Shape ${index}`} />
+              {selectedShapes.includes(index) && (
+                <div className="selected-overlay"></div>
+              )}
+            </div>
+          ))}
         </Box>
       </Modal>
-
     </div>
   );
 }
