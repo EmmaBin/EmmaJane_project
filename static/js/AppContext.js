@@ -5,11 +5,11 @@ export const AppContext = createContext();
 export const AppProvider = ({ children }) => {
     const [team, setTeam] = useState(null);
     const [checkedMembers, setCheckedMembers] = useState([])
-    // const [selectedWindows, setSelectedWindows] = useState([])
+    const [selectedShapes, setSelectedShapes] = useState([]);
 
 
     return (
-        <AppContext.Provider value={{ team, setTeam, checkedMembers, setCheckedMembers }}>
+        <AppContext.Provider value={{ team, setTeam, checkedMembers, setCheckedMembers, selectedShapes, setSelectedShapes }}>
             {children}
         </AppContext.Provider>
     );
