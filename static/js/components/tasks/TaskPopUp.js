@@ -20,12 +20,12 @@ const style = {
 };
 
 export default function BasicModal() {
-    
-    const { checkedMembers, setCheckedMembers } = React.useContext(AppContext)
-//   const { team } = React.useContext(AppContext);
+
+  const { checkedMembers, setCheckedMembers } = React.useContext(AppContext)
+  //   const { team } = React.useContext(AppContext);
   const [open, setOpen] = React.useState(false);
-//   const [members, setMembers] = React.useState([]);
-//   const { checkedMembers, setCheckedMembers } = React.useContext(AppContext)
+  //   const [members, setMembers] = React.useState([]);
+  //   const { checkedMembers, setCheckedMembers } = React.useContext(AppContext)
 
 
   const handleOpen = async () => {
@@ -33,50 +33,19 @@ export default function BasicModal() {
     // if (!team) {
     //   console.error('Team value is missing');
     //   return;
-    }
+  }
 
-//     const fetchMembers = async () => {
-//       try {
-//         const response = await fetch(`/team_members?team=${team}`);
-//         if (!response.ok) {
-//           throw new Error(`Error fetching members: ${response.statusText}`);
-//         }
-//         const result = await response.json();
-//         setMembers(Object.values(result));
-//         console.log("Here is what was sent from the backend team", result);
-//       } catch (error) {
-//         console.error(error);
-//       }
-//     }
 
-//     fetchMembers();
-//   };
 
 
   const handleClose = () => setOpen(false);
 
-//   const handleCheckboxChange = (member) => {
-//     setCheckedMembers((prevCheckedMembers) => {
-//       const isChecked = prevCheckedMembers.some((m) => m.user_id === member.user_id);
-//       if (isChecked) {
-//         return prevCheckedMembers.filter((m) => m.user_id !== member.user_id);
-//       } else {
-//         return [...prevCheckedMembers, member];
-//       }
-//     });
-//     console.log("!!!checked box changed", checkedMembers)
-//   };
-
-//   const isChecked = (userId) => {
-//     return checkedMembers.some((m) => m.user_id === userId);
-
-//   };
 
   return (
     <div>
-      <Button 
-        className="add-members" 
-        onClick={handleOpen}>Add Members <IoMdArrowDropdown />
+      <Button
+        className="add-members"
+        onClick={handleOpen}>Add windows <IoMdArrowDropdown />
       </Button>
       <Modal
         open={open}

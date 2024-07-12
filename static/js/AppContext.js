@@ -9,7 +9,7 @@ export const AppProvider = ({ children }) => {
 
 
     return (
-        <AppContext.Provider value={{ team, setTeam, checkedMembers, setCheckedMembers, selectedWindows, setSelectedWindows }}>
+        <AppContext.Provider value={{ team, setTeam, checkedMembers, setCheckedMembers }}>
             {children}
         </AppContext.Provider>
     );

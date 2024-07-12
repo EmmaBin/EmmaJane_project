@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.py",
   "scripts": {
-    "build": "webpack --mode development"
+    "build": "webpack --mode development --watch"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",

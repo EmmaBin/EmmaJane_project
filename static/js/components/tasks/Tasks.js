@@ -12,13 +12,13 @@ const Tasks = () => {
         <div>
             <h2>{pname}</h2>
             <h3>{address}</h3>
-            
+
 
             <div>
-                    <div>
-                        <label>Team</label>
-                        <TaskPopUp />
-                    </div>
+                <div>
+                    <label>Window</label>
+                    <TaskPopUp />
+                </div>
 
             </div>
         </div>
