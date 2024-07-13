@@ -3,22 +3,35 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 400px;
+    width: 500px;
     background-color: white;
     border: 2px solid #000;
     box-shadow: 24px 24px 24px rgba(0, 0, 0, 0.25);
     padding: 16px;
+    display: flex;
+    flex-direction: column;
+}
 
+.shapes-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
 .shape-container {
     position: relative;
-    display: inline-block;
-    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
 }
 
 .shape-container img {
     display: block;
+    max-width: 100px;
+    max-height: 100px;
 }
 
 .selected-overlay {
@@ -28,4 +41,13 @@
     right: 0;
     bottom: 0;
     background-color: rgba(80, 38, 232, 0.5);
+}
+
+.delete-button {
+    align-self: flex-start;
+    background-color: red !important;
+    color: white !important;
+    border: none !important;
+    padding: 10px 20px !important;
+    cursor: pointer !important;
 }

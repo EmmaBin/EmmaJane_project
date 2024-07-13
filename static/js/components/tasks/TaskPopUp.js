@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import './TasksPopUp.css';
 import { IoMdArrowDropdown } from "react-icons/io";
@@ -15,6 +14,7 @@ export default function BasicModal() {
   const [shapes] = React.useState([rectangle, sidewayRectangle, square, upperLowerBottom]);
   const { selectedShapes, setSelectedShapes } = React.useContext(AppContext);
   const [open, setOpen] = React.useState(false);
+  const [currentShape, setCurrentShape] = React.useState(null);
 
   const handleOpen = () => {
     setOpen(true);
@@ -24,6 +24,12 @@ export default function BasicModal() {
 
   const addShape = (index) => {
     setSelectedShapes((prevSelectedShapes) => [...prevSelectedShapes, index]);
+    setCurrentShape(index);
+  };
+
+  const removeCurrentShape = () => {
+    setSelectedShapes((prevSelectedShapes) => prevSelectedShapes.filter((shapeIndex) => shapeIndex !== currentShape));
+    setCurrentShape(null);
   };
 
   return (
@@ -39,18 +45,26 @@ export default function BasicModal() {
         aria-describedby="modal-modal-description"
       >
         <Box className="modal-box">
-          {shapes.map((shape, index) => (
-            <div
-              key={index}
-              className="shape-container"
-              onClick={() => addShape(index)}
-            >
-              <img src={shape} alt={`Shape ${index}`} />
-              {selectedShapes.includes(index) && (
-                <div className="selected-overlay"></div>
-              )}
-            </div>
-          ))}
+          <div className="shapes-container">
+            {shapes.map((shape, index) => (
+              <div
+                key={index}
+                className={`shape-container ${selectedShapes.includes(index) ? 'selected' : ''}`}
+                onClick={() => addShape(index)}
+              >
+                <img src={shape} alt={`Shape ${index}`} />
+                {selectedShapes.includes(index) && (
+                  <div className="selected-overlay"></div>
+                )}
+              </div>
+            ))}
+          </div>
+          <Button
+            className="delete-button"
+            onClick={removeCurrentShape}
+          >
+            Delete
+          </Button>
         </Box>
       </Modal>
     </div>
