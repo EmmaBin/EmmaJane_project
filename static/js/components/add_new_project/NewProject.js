@@ -23,12 +23,13 @@ const NewProject = () => {
     };
 
     const validate = () => {
-        return projectInfo.pname.trim() !== '' && projectInfo.address.trim() !== '';
+        console.log(checkedMembers);
+        return projectInfo.pname.trim() !== '' && projectInfo.address.trim() !== '' && checkedMembers.length > 0;
     };
 
     useEffect(() => {
         setIsFormValid(validate());
-    }, [projectInfo]);
+    }, [projectInfo, checkedMembers]);
 
 
     const handleChange = (e) => {
@@ -56,7 +57,6 @@ const NewProject = () => {
             if (response.ok) {
                 const data = await response.json(); // Await here to get JSON data
                 const projectId = data.project_id;
-                console.log("Project ID:", projectId);
                 setCheckedMembers([]);
                 navigate(`/project/${projectId}`, { 
                     state: { 
@@ -117,7 +117,13 @@ const NewProject = () => {
                     <label>Team</label>
                     <PopUp />
                 </div>
-                <button type="submit" className={`continue-btn ${isFormValid ? 'active' : ''}`}>Continue</button>
+                <button 
+                    type="submit" 
+                    className={`continue-btn ${isFormValid ? 'active' : ''}`} 
+                    disabled={!isFormValid}
+                >
+                    Continue
+                </button>
 
                 {checkedMembers && checkedMembers.length > 0 &&
                     checkedMembers.map((member) => (

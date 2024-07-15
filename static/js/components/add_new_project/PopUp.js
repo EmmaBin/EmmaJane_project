@@ -41,7 +41,7 @@ export default function BasicModal() {
         }
         const result = await response.json();
         setMembers(Object.values(result));
-        console.log("Here is what was sent from the backend team", result);
+        // console.log("Here is what was sent from the backend team", result);
       } catch (error) {
         console.error(error);
       }
@@ -62,7 +62,7 @@ export default function BasicModal() {
         return [...prevCheckedMembers, member];
       }
     });
-    console.log("!!!checked box changed", checkedMembers)
+    // console.log("!!!checked box changed", checkedMembers)
   };
 
   const isChecked = (userId) => {
