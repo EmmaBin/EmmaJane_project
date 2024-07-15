@@ -50,9 +50,16 @@ input:focus {
 
 }
 
-.add-members {
-    align-items: right;
+.add-box{
+    justify-content: right;
+}
+
+.add-btn {
     border: none;
+}
+
+.add-members {
+    font-size: 14px;
 }
 
 button.continue-btn {
@@ -65,8 +72,20 @@ button.continue-btn {
     cursor: not-allowed;
 }
 
+.checkbox {
+    margin: 0;
+    width: auto; 
+    vertical-align: middle;
+}
+
 .continue-btn {
     margin-top: 40px;
+}
+
+.invite-header {
+    font-size: 14px;
+    text-align: center;
+    text-decoration: underline;
 }
 
 button.continue-btn.active {
@@ -79,6 +98,11 @@ button.continue-btn.active {
     color: red;
 }
 
+.role {
+    color: #606778;
+}
+
 .team {
+    align-items: center;
     display: flex;
 }

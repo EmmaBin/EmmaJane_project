@@ -113,7 +113,7 @@ const NewProject = () => {
                         aria-label="Project address" 
                     />
                 </div>
-                <div>
+                <div className="team">
                     <label>Team</label>
                     <PopUp />
                 </div>
