@@ -93,16 +93,40 @@ button.continue-btn.active {
     cursor: pointer;
 }
 
-.remove-button {
-    background-color: transparent;
-    color: red;
+.member-info {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+  }
+  
+.member-info .lname {
+    margin-left: 5px;
 }
 
-.role {
+.member-item {
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    margin-bottom: 25px; 
+    padding: 10px;
+}
+
+.member-role {
     color: #606778;
+    text-align: center;
+}
+
+.remove-button {
+    background-color: transparent;
+    border-color: red;
+    border-radius: 8px;
+    color: red;
 }
 
 .team {
     align-items: center;
     display: flex;
+    justify-content: space-between;
 }

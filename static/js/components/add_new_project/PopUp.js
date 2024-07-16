@@ -83,27 +83,24 @@ export default function BasicModal() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography className="invite-header" id="modal-modal-title" 
-            // variant="h6" component="h2"
-          >
+          <Typography className="invite-header" id="modal-modal-title">
             Invite to team
           </Typography>
           <Box alignItems="center" sx={{ mt: 2, mb: 8 }}>
             {members.map((member) => (
               <Box 
-                key={member.user_id} 
-                display="flex" 
-                alignItems="center" 
-                justifyContent="space-between" 
-                mb={2}
-                mt={4}
-                borderBottom="1px solid #ccc"
+                key={member.user_id}
+                className="member-item"
               >
-                <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div 
+                  className="member-info"
+                >
                   <Typography>{member.fname}</Typography>
-                  <Typography style={{ marginLeft: '5px' }}>{member.lname}</Typography>
+                  <Typography 
+                    className="lname"
+                  >{member.lname}</Typography>
                 </div>
-                  <Typography className="role">{member.role}</Typography>
+                  <Typography className="member-role">{member.role}</Typography>
                   <input 
                     className="checkbox"
                     type="checkbox" 

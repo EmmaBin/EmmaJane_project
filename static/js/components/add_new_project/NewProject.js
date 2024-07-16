@@ -23,7 +23,6 @@ const NewProject = () => {
     };
 
     const validate = () => {
-        console.log(checkedMembers);
         return projectInfo.pname.trim() !== '' && projectInfo.address.trim() !== '' && checkedMembers.length > 0;
     };
 
@@ -128,8 +127,11 @@ const NewProject = () => {
                 {checkedMembers && checkedMembers.length > 0 &&
                     checkedMembers.map((member) => (
                         <div className="member-item" key={member.user_id}>
-                            <div className="member-info">
-                                <div className="member-name">{member.fname} {member.lname}</div>
+                            <div>
+                                <div className="member-info">
+                                    <div>{member.fname}</div>
+                                    <div className="lname">{member.lname}</div>
+                                </div>
                                 <div className="member-role">{member.role}</div>
                             </div>
                             <button
