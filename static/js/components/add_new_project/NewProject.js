@@ -81,7 +81,9 @@ const NewProject = () => {
 
     return (
         <div>
-            <h2>Add new project</h2>
+            <div className='newproject-div'>
+                <h2>Add new project</h2>
+            </div>
 
             <form onSubmit={handleSubmit}>
                 <div>
@@ -116,13 +118,6 @@ const NewProject = () => {
                     <label>Team</label>
                     <PopUp />
                 </div>
-                <button 
-                    type="submit" 
-                    className={`continue-btn ${isFormValid ? 'active' : ''}`} 
-                    disabled={!isFormValid}
-                >
-                    Continue
-                </button>
 
                 {checkedMembers && checkedMembers.length > 0 &&
                     checkedMembers.map((member) => (
@@ -143,9 +138,14 @@ const NewProject = () => {
                         </div>
                     ))
                 }
-
-
-
+                
+                <button 
+                    type="submit" 
+                    className={`continue-btn ${isFormValid ? 'active' : ''}`} 
+                    disabled={!isFormValid}
+                >
+                    Continue
+                </button>
 
             </form>
 

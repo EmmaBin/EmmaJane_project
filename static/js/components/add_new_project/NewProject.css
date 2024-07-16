@@ -118,6 +118,11 @@ button.continue-btn.active {
     text-align: center;
 }
 
+.newproject-div {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
 .remove-button {
     background-color: transparent;
     border-color: red;
@@ -127,6 +132,7 @@ button.continue-btn.active {
 
 .team {
     align-items: center;
+    border-bottom: 1px solid #ccc;
     display: flex;
     justify-content: space-between;
 }
