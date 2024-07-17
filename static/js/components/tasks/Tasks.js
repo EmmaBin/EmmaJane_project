@@ -8,6 +8,7 @@ import sidewayRectangle from '../../../images/sideway_rectangle.png';
 import square from '../../../images/square.png';
 import upperLowerTop from '../../../images/upper_lower_top.png';
 import upperLowerBottom from '../../../images/upper_lower_bottom.png';
+import { MdModeEdit } from "react-icons/md";
 
 const shapes = [rectangle, sidewayRectangle, square, upperLowerTop, upperLowerBottom];
 
@@ -56,6 +57,9 @@ const Tasks = () => {
         <div className="tasks-container">
             <div className="header">
                 <h2>{pname}</h2>
+                <div className="icon-container">
+                    <MdModeEdit className="custom-icon" size={14} />
+                </div>
                 <h3>{address}</h3>
             </div>
             <div className="window-section">
@@ -66,10 +70,15 @@ const Tasks = () => {
                 <div className="selected-shapes">
                     {selectedShapes.map((shapeIndex, idx) => (
                         <div key={idx} className="shape-item">
-                            <img src={shapes[shapeIndex]} alt={`Selected Shape ${shapeIndex}`} />
+                            <div className="shape-container">
+                                <img src={shapes[shapeIndex]} alt={`Selected Shape ${shapeIndex}`} />
+                                <MdModeEdit className="edit-icon custom-icon" size={14} />
+                            </div>
                             <div className="shape-details">
-                                <span className="shape-name">Rectangle</span>
-                                <input type="text" placeholder="Name window" className="shape-input" disabled={!editMode[idx]} />
+                                <div className="shape-info">
+                                    <span className="shape-name">Rectangle</span>
+                                    <input type="text" placeholder="Name window" className="shape-input" disabled={!editMode[idx]} />
+                                </div>
                                 <div className="shape-actions">
                                     {editMode[idx] ? (
                                         <>
@@ -89,6 +98,9 @@ const Tasks = () => {
             <button className={`continue-btn ${isContinueActive ? 'active' : ''}`} disabled={!isContinueActive}>
                 Continue
             </button>
+            <div className="continue-container">
+                <button className="continue-btn">Continue</button>
+            </div>
         </div>
     );
 };
