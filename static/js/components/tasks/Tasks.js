@@ -98,9 +98,6 @@ const Tasks = () => {
             <button className={`continue-btn ${isContinueActive ? 'active' : ''}`} disabled={!isContinueActive}>
                 Continue
             </button>
-            <div className="continue-container">
-                <button className="continue-btn">Continue</button>
-            </div>
         </div>
     );
 };
