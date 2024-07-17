@@ -46,6 +46,7 @@ class Project(db.Model):
     project_id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
     pname = db.Column(db.String, nullable=False)
     address = db.Column(db.String, nullable=False)
+    completed = db.Column(db.Boolean, default=False, nullable=False)
 
     user_projects = db.relationship("UserProject", back_populates="project")
     tasks = db.relationship("Task", back_populates="project")
@@ -87,10 +88,10 @@ class Task(db.Model):
     __tablename__ = "Task"
 
     task_id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
-    tname = db.Column(db.String, nullable=False)
-    date_assigned = db.Column(db.DateTime, nullable=False)
+    tname = db.Column(db.String, nullable=True)
+    date_assigned = db.Column(db.DateTime, nullable=True)
     date_completed = db.Column(db.DateTime, nullable=True)
-    contact_info = db.Column(db.String, nullable=False)
+    contact_info = db.Column(db.String, nullable=True)
     status = db.Column(db.String, nullable=False)
 
     project_id = db.Column(db.Integer, db.ForeignKey('Project.project_id'), nullable=False) 
