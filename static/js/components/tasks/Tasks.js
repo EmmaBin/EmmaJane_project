@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import TaskPopUp from './TaskPopUp';
 import { AppContext } from '../../AppContext';
@@ -6,9 +6,10 @@ import './Tasks.css';
 import rectangle from '../../../images/rectangle.png';
 import sidewayRectangle from '../../../images/sideway_rectangle.png';
 import square from '../../../images/square.png';
+import upperLowerTop from '../../../images/upper_lower_top.png';
 import upperLowerBottom from '../../../images/upper_lower_bottom.png';
 
-const shapes = [rectangle, sidewayRectangle, square, upperLowerBottom];
+const shapes = [rectangle, sidewayRectangle, square, upperLowerTop, upperLowerBottom];
 
 const Tasks = () => {
     const { projectId } = useParams();
@@ -16,6 +17,12 @@ const Tasks = () => {
     const { pname, address } = location.state || {};
     const { selectedShapes, setSelectedShapes } = useContext(AppContext);
     const [editMode, setEditMode] = useState(selectedShapes.map(() => false));
+    const [isContinueActive, setIsContinueActive] = useState(false);
+
+    useEffect(() => {
+        // Check if selectedShapes is not empty to enable Continue button
+        setIsContinueActive(selectedShapes.length > 0);
+    }, [selectedShapes]);
 
     // const toggleEditMode = (index) => {
     //     setEditMode((prevEditMode) => {
@@ -79,7 +86,9 @@ const Tasks = () => {
                     ))}
                 </div>
             </div>
-            <button className="continue-btn">Continue</button>
+            <button className={`continue-btn ${isContinueActive ? 'active' : ''}`} disabled={!isContinueActive}>
+                Continue
+            </button>
         </div>
     );
 };

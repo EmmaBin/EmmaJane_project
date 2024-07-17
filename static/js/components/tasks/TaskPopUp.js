@@ -8,10 +8,11 @@ import { AppContext } from '../../AppContext';
 import rectangle from '../../../images/rectangle.png';
 import sidewayRectangle from '../../../images/sideway_rectangle.png';
 import square from '../../../images/square.png';
+import upperLowerTop from '../../../images/upper_lower_top.png';
 import upperLowerBottom from '../../../images/upper_lower_bottom.png';
 
 export default function BasicModal() {
-  const [shapes] = React.useState([rectangle, sidewayRectangle, square, upperLowerBottom]);
+  const [shapes] = React.useState([rectangle, sidewayRectangle, square, upperLowerTop, upperLowerBottom]);
   const { selectedShapes, setSelectedShapes } = React.useContext(AppContext);
   const [open, setOpen] = React.useState(false);
   const [currentShape, setCurrentShape] = React.useState(null);
