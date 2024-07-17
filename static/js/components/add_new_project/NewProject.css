@@ -50,9 +50,16 @@ input:focus {
 
 }
 
-.add-members {
-    align-items: right;
+.add-box{
+    justify-content: right;
+}
+
+.add-btn {
     border: none;
+}
+
+.add-members {
+    font-size: 14px;
 }
 
 button.continue-btn {
@@ -65,8 +72,20 @@ button.continue-btn {
     cursor: not-allowed;
 }
 
+.checkbox {
+    margin: 0;
+    width: auto; 
+    vertical-align: middle;
+}
+
 .continue-btn {
     margin-top: 40px;
+}
+
+.invite-header {
+    font-size: 14px;
+    text-align: center;
+    text-decoration: underline;
 }
 
 button.continue-btn.active {
@@ -74,11 +93,46 @@ button.continue-btn.active {
     cursor: pointer;
 }
 
+.member-info {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+  }
+  
+.member-info .lname {
+    margin-left: 5px;
+}
+
+.member-item {
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    margin-bottom: 25px; 
+    padding: 10px;
+}
+
+.member-role {
+    color: #606778;
+    text-align: center;
+}
+
+.newproject-div {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
 .remove-button {
     background-color: transparent;
+    border-color: red;
+    border-radius: 8px;
     color: red;
 }
 
 .team {
+    align-items: center;
+    border-bottom: 1px solid #ccc;
     display: flex;
+    justify-content: space-between;
 }

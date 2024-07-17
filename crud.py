@@ -55,8 +55,9 @@ def get_projects_by_user_id(user_id):
     """Return all projects of a user id"""
 
     user_projects = UserProject.query.filter(UserProject.user_id==user_id).all()
-#need tests
-    return {user_project.project_id: user_project.to_dict() for user_project in user_projects}
+    projects = [user_project.project for user_project in user_projects]
+
+    return [project.to_dict() for project in projects]
 
 
 # USERTASK-RELATED

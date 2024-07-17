@@ -41,7 +41,7 @@ export default function BasicModal() {
         }
         const result = await response.json();
         setMembers(Object.values(result));
-        console.log("Here is what was sent from the backend team", result);
+        // console.log("Here is what was sent from the backend team", result);
       } catch (error) {
         console.error(error);
       }
@@ -62,7 +62,7 @@ export default function BasicModal() {
         return [...prevCheckedMembers, member];
       }
     });
-    console.log("!!!checked box changed", checkedMembers)
+    // console.log("!!!checked box changed", checkedMembers)
   };
 
   const isChecked = (userId) => {
@@ -71,9 +71,9 @@ export default function BasicModal() {
   };
 
   return (
-    <div className="team">
+    <div className="add-box">
       <Button 
-        className="add-members" 
+        className="add-btn" 
         onClick={handleOpen}>Add Members <IoMdArrowDropdown />
       </Button>
       <Modal
@@ -83,21 +83,35 @@ export default function BasicModal() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
+          <Typography className="invite-header" id="modal-modal-title">
             Invite to team
           </Typography>
-          <Box sx={{ mt: 2 }}>
+          <Box alignItems="center" sx={{ mt: 2, mb: 8 }}>
             {members.map((member) => (
-              <Box key={member.user_id} display="flex" alignItems="center" justifyContent="space-between" mb={1}>
-                <Typography>{member.fname} {member.lname}</Typography>
-                <Typography>{member.role}</Typography>
-                <input type="checkbox" checked={isChecked(member.user_id)}
-                  onChange={() => handleCheckboxChange(member)} />
+              <Box 
+                key={member.user_id}
+                className="member-item"
+              >
+                <div 
+                  className="member-info"
+                >
+                  <Typography>{member.fname}</Typography>
+                  <Typography 
+                    className="lname"
+                  >{member.lname}</Typography>
+                </div>
+                  <Typography className="member-role">{member.role}</Typography>
+                  <input 
+                    className="checkbox"
+                    type="checkbox" 
+                    checked={isChecked(member.user_id)} 
+                    onChange={() => handleCheckboxChange(member)} 
+                  />
               </Box>
             ))}
           </Box>
           <Box mt={2}>
-            <Typography variant="subtitle1">Invite share link</Typography>
+            <Typography variant="subtitle1">Invite share link - Work In Progress</Typography>
             <input type="text" value="https://invite.jrpsystems.dsahjgka91820" readOnly style={{ width: '100%', marginBottom: '10px' }} />
             <Button variant="contained">Copy Link</Button>
           </Box>

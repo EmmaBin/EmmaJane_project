@@ -107,6 +107,7 @@
 .shape-info {
     display: flex;
     align-items: center;
+    flex-direction: column;
     flex-grow: 1;
 }
 
@@ -130,6 +131,7 @@
 }
 
 .cancel-btn,
+.delete-btn,
 .save-btn,
 .edit-btn {
     padding: 5px 10px;
@@ -140,6 +142,11 @@
 
 .cancel-btn {
     background-color: #ff4d4d;
+    color: #fff;
+}
+
+.delete-btn {
+    background-color: red;
     color: #fff;
 }
 

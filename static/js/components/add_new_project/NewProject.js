@@ -23,12 +23,12 @@ const NewProject = () => {
     };
 
     const validate = () => {
-        return projectInfo.pname.trim() !== '' && projectInfo.address.trim() !== '';
+        return projectInfo.pname.trim() !== '' && projectInfo.address.trim() !== '' && checkedMembers.length > 0;
     };
 
     useEffect(() => {
         setIsFormValid(validate());
-    }, [projectInfo]);
+    }, [projectInfo, checkedMembers]);
 
 
     const handleChange = (e) => {
@@ -56,7 +56,6 @@ const NewProject = () => {
             if (response.ok) {
                 const data = await response.json(); // Await here to get JSON data
                 const projectId = data.project_id;
-                console.log("Project ID:", projectId);
                 setCheckedMembers([]);
                 navigate(`/project/${projectId}`, { 
                     state: { 
@@ -82,7 +81,9 @@ const NewProject = () => {
 
     return (
         <div>
-            <h2>Add new project</h2>
+            <div className='newproject-div'>
+                <h2>Add new project</h2>
+            </div>
 
             <form onSubmit={handleSubmit}>
                 <div>
@@ -113,17 +114,19 @@ const NewProject = () => {
                         aria-label="Project address" 
                     />
                 </div>
-                <div>
+                <div className="team">
                     <label>Team</label>
                     <PopUp />
                 </div>
-                <button type="submit" className={`continue-btn ${isFormValid ? 'active' : ''}`}>Continue</button>
 
                 {checkedMembers && checkedMembers.length > 0 &&
                     checkedMembers.map((member) => (
                         <div className="member-item" key={member.user_id}>
-                            <div className="member-info">
-                                <div className="member-name">{member.fname} {member.lname}</div>
+                            <div>
+                                <div className="member-info">
+                                    <div>{member.fname}</div>
+                                    <div className="lname">{member.lname}</div>
+                                </div>
                                 <div className="member-role">{member.role}</div>
                             </div>
                             <button
@@ -135,9 +138,14 @@ const NewProject = () => {
                         </div>
                     ))
                 }
-
-
-
+                
+                <button 
+                    type="submit" 
+                    className={`continue-btn ${isFormValid ? 'active' : ''}`} 
+                    disabled={!isFormValid}
+                >
+                    Continue
+                </button>
 
             </form>
 

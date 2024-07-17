@@ -90,22 +90,34 @@ def profile():
     """Profile"""
 
     user_id = session.get('user')
+    
     if user_id:
         user = crud.get_user_by_id(user_id)
+        projects = crud.get_projects_by_user_id(user_id)
+
         if user:
+
+            curr_projects_data = [
+                {
+                    "id": project["project_id"],  
+                    "pname": project["pname"],  
+                    "address": project["address"]
+                }
+                for project in projects
+            ]
+
             return jsonify({
                 "id": user.user_id,
                 "fname": user.fname,
                 "lname": user.lname,
                 "email": user.email,
                 "team": user.team,
-                "role": user.role
-                # "current_projects": user.current_projects,  # Assuming these fields exist
-                # "previous_projects": user.previous_projects  # Assuming these fields exist
+                "role": user.role,
+                "current_projects": curr_projects_data
+                # "previous_projects": user.previous_projects  # Assuming these fields exist - will likely need to add "completion status" to model.py
             }), 200
 
     return jsonify({"error": "Unauthorized"}), 401
-
 
 @app.route("/team_members", methods=['GET'])
 def members():

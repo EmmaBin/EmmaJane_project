@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import TaskPopUp from './TaskPopUp';
 import { AppContext } from '../../AppContext';
@@ -6,24 +6,51 @@ import './Tasks.css';
 import rectangle from '../../../images/rectangle.png';
 import sidewayRectangle from '../../../images/sideway_rectangle.png';
 import square from '../../../images/square.png';
+import upperLowerTop from '../../../images/upper_lower_top.png';
 import upperLowerBottom from '../../../images/upper_lower_bottom.png';
 import { MdModeEdit } from "react-icons/md";
 
-const shapes = [rectangle, sidewayRectangle, square, upperLowerBottom];
+const shapes = [rectangle, sidewayRectangle, square, upperLowerTop, upperLowerBottom];
 
 const Tasks = () => {
     const { projectId } = useParams();
     const location = useLocation();
     const { pname, address } = location.state || {};
-    const { selectedShapes } = useContext(AppContext);
+    const { selectedShapes, setSelectedShapes } = useContext(AppContext);
     const [editMode, setEditMode] = useState(selectedShapes.map(() => false));
+    const [isContinueActive, setIsContinueActive] = useState(false);
 
-    const toggleEditMode = (index) => {
-        setEditMode((prevEditMode) => {
-            const newEditMode = [...prevEditMode];
-            newEditMode[index] = !newEditMode[index];
-            return newEditMode;
-        });
+    useEffect(() => {
+        // Check if selectedShapes is not empty to enable Continue button
+        setIsContinueActive(selectedShapes.length > 0);
+    }, [selectedShapes]);
+
+    // const toggleEditMode = (index) => {
+    //     setEditMode((prevEditMode) => {
+    //         const newEditMode = [...prevEditMode];
+    //         newEditMode[index] = !newEditMode[index];
+    //         return newEditMode;
+    //     });
+    // };
+
+    const toggleEditMode = (index, isDelete = false) => {
+        if (isDelete) {
+            // Handle delete operation
+            setSelectedShapes((prevSelectedShapes) =>
+                prevSelectedShapes.filter((_, idx) => idx !== index)
+            );
+
+            setEditMode((prevEditMode) =>
+                prevEditMode.filter((_, idx) => idx !== index)
+            );
+        } else {
+            // Toggle edit mode
+            setEditMode((prevEditMode) => {
+                const newEditMode = [...prevEditMode];
+                newEditMode[index] = !newEditMode[index];
+                return newEditMode;
+            });
+        }
     };
 
     return (
@@ -57,6 +84,7 @@ const Tasks = () => {
                                         <>
                                             <button className="cancel-btn" onClick={() => toggleEditMode(idx)}>Cancel</button>
                                             <button className="save-btn" onClick={() => toggleEditMode(idx)}>Save</button>
+                                            <button className="delete-btn" onClick={() => toggleEditMode(idx, true)}>Delete</button>
                                         </>
                                     ) : (
                                         <button className="edit-btn" onClick={() => toggleEditMode(idx)}>Edit</button>
@@ -67,6 +95,9 @@ const Tasks = () => {
                     ))}
                 </div>
             </div>
+            <button className={`continue-btn ${isContinueActive ? 'active' : ''}`} disabled={!isContinueActive}>
+                Continue
+            </button>
             <div className="continue-container">
                 <button className="continue-btn">Continue</button>
             </div>
