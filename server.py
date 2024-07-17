@@ -114,7 +114,7 @@ def profile():
                 "team": user.team,
                 "role": user.role,
                 "current_projects": curr_projects_data
-                # "previous_projects": user.previous_projects  # Assuming these fields exist
+                # "previous_projects": user.previous_projects  # Assuming these fields exist - will likely need to add "completion status" to model.py
             }), 200
 
     return jsonify({"error": "Unauthorized"}), 401

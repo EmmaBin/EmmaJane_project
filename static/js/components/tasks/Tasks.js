@@ -14,15 +14,35 @@ const Tasks = () => {
     const { projectId } = useParams();
     const location = useLocation();
     const { pname, address } = location.state || {};
-    const { selectedShapes } = useContext(AppContext);
+    const { selectedShapes, setSelectedShapes } = useContext(AppContext);
     const [editMode, setEditMode] = useState(selectedShapes.map(() => false));
 
-    const toggleEditMode = (index) => {
-        setEditMode((prevEditMode) => {
-            const newEditMode = [...prevEditMode];
-            newEditMode[index] = !newEditMode[index];
-            return newEditMode;
-        });
+    // const toggleEditMode = (index) => {
+    //     setEditMode((prevEditMode) => {
+    //         const newEditMode = [...prevEditMode];
+    //         newEditMode[index] = !newEditMode[index];
+    //         return newEditMode;
+    //     });
+    // };
+
+    const toggleEditMode = (index, isDelete = false) => {
+        if (isDelete) {
+            // Handle delete operation
+            setSelectedShapes((prevSelectedShapes) =>
+                prevSelectedShapes.filter((_, idx) => idx !== index)
+            );
+
+            setEditMode((prevEditMode) =>
+                prevEditMode.filter((_, idx) => idx !== index)
+            );
+        } else {
+            // Toggle edit mode
+            setEditMode((prevEditMode) => {
+                const newEditMode = [...prevEditMode];
+                newEditMode[index] = !newEditMode[index];
+                return newEditMode;
+            });
+        }
     };
 
     return (
@@ -48,6 +68,7 @@ const Tasks = () => {
                                         <>
                                             <button className="cancel-btn" onClick={() => toggleEditMode(idx)}>Cancel</button>
                                             <button className="save-btn" onClick={() => toggleEditMode(idx)}>Save</button>
+                                            <button className="delete-btn" onClick={() => toggleEditMode(idx, true)}>Delete</button>
                                         </>
                                     ) : (
                                         <button className="edit-btn" onClick={() => toggleEditMode(idx)}>Edit</button>
