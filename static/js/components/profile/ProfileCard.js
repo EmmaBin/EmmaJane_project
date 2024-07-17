@@ -59,26 +59,17 @@ const ProfileCard = () => {
                         </summary>
 
                         <ul>
-                            <li>
-                                <div className="project-info">
-                                    <div className="project-details">
-                                        <div className="project-title">Current Project 1</div>
-                                        <div className="project-location">Location 1</div>
+                            {user.current_projects.map((project) => (
+                                <li key={project.id}>
+                                    <div className="project-info">
+                                        <div className="project-details">
+                                            <div className="project-title">{project.pname}</div>
+                                            <div className="project-location">{project.address}</div>
+                                        </div>
+                                        <button className="view-job-btn">View job</button>
                                     </div>
-
-                                    <button className="view-job-btn">View job</button>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="project-info">
-                                    <div className="project-details">
-                                        <div className="project-title">Current Project 2</div>
-                                        <div className="project-location">Location 2</div>
-                                    </div>
-
-                                    <button className="view-job-btn">View job</button>
-                                </div>
-                            </li>
+                                </li>
+                            ))}
                         </ul>
                     </details>
                 </div>
