@@ -7,9 +7,17 @@ import crud
 import datetime
 import os
 from dotenv import load_dotenv
-
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 load_dotenv()
+
+cloudinary.config(
+    cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME'),
+    api_key = os.getenv('CLOUDINARY_API_KEY'),
+    api_secret = os.getenv('CLOUDINARY_API_SECRET')
+)
 
 app = Flask(__name__)
 app.secret_key = os.getenv("EmmaJane5678")
@@ -85,6 +93,37 @@ def register():
         })
 
 
+# Upload profile photos
+@app.route('/upload-image', methods=['POST'])
+def upload_image():
+    try:
+        file_to_upload = request.files['file']
+        upload_result = cloudinary.uploader.upload(file_to_upload)
+        return jsonify({'secure_url': upload_result['secure_url']}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+@app.route('/update-profile-image', methods=['POST'])
+def update_profile_image():
+    data = request.json
+    user_id = data.get('user_id')
+    profile_image = data.get('profileImage')
+
+    if update_user_profile_image(user_id, profile_image):
+        return jsonify({'message': 'Profile image updated successfully'}), 200
+    
+    return jsonify({'error': 'User not found'}), 404
+
+def update_user_profile_image(user_id, profile_image):
+    user = crud.get_user_by_id(user_id)
+    if user:
+        user.profile_image = profile_image
+        db.session.commit()
+        return True
+    return False
+
+
+# DASHBOARD
 @app.route("/dashboard", methods=['GET'])
 def profile():
     """Profile"""
