@@ -20,6 +20,7 @@ class User(db.Model):
     password = db.Column(db.String, nullable=False)
     team = db.Column(db.String, nullable=False)
     role = db.Column(db.String, nullable=False)
+    profile_image = db.Column(db.String(200), nullable=True)
 
     user_projects = db.relationship("UserProject", back_populates="user")
     user_task = db.relationship("UserTask", back_populates="user")
