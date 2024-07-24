@@ -26,7 +26,7 @@ class User(db.Model):
     user_task = db.relationship("UserTask", back_populates="user")
 
     def __repr__(self):
-        return f'<User user_id={self.user_id} fname={self.fname} lname={self.lname} email={self.email} team={self.team} role={self.role}>'
+        return f'<User user_id={self.user_id} fname={self.fname} lname={self.lname} email={self.email} team={self.team} role={self.role} profile_image={self.profile_image}>'
     
     def to_dict(self):
         return {'user_id': self.user_id,
@@ -34,7 +34,8 @@ class User(db.Model):
                 'lname': self.lname,
                 'email': self.email,
                 'team': self.team,
-                'role': self.role
+                'role': self.role,
+                'profile_image': self.profile_image
                 }
 
 

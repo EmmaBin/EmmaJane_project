@@ -40,9 +40,10 @@ const ProfileCard = () => {
 
         const formData = new FormData();
         formData.append('file', file);
+        formData.append('user_id', user.id);
 
         try {
-            const response = await fetch('http://127.0.0.1:5000/upload-image', {
+            const response = await fetch('/upload-image', {
                 method: 'POST',
                 body: formData,
             });
@@ -74,7 +75,7 @@ const ProfileCard = () => {
     
             console.log('Sending request to server with user ID:', user.id, 'and secure URL:', secureUrl);
     
-            const response = await fetch('http://127.0.0.1:5000/update-profile-image', {
+            const response = await fetch('/update-profile-image', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -83,13 +84,14 @@ const ProfileCard = () => {
             });
     
             if (!response.ok) {
-                throw new Error('Failed to update profile image');
+                const errorText = await response.text();
+                throw new Error(`Failed to update profile image: ${errorText}`);
             }
     
             const result = await response.json();
             console.log('Profile image updated successfully:', result.message);
         } catch (error) {
-            console.error('Error updating profile image:', error);
+            console.error('Error updating profile image:', error.message);
             // Handle error appropriately (e.g., show error message to user)
         }
     };

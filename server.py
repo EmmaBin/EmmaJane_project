@@ -98,29 +98,72 @@ def register():
 def upload_image():
     try:
         file_to_upload = request.files['file']
+        user_id = request.form['user_id']
+
+        # Upload the image to Cloudinary
         upload_result = cloudinary.uploader.upload(file_to_upload)
-        return jsonify({'secure_url': upload_result['secure_url']}), 200
+        secure_url = upload_result['secure_url']
+
+        # Update the user's profile image in the database
+        user = crud.get_user_by_id(user_id)
+        if user:
+            user.profile_image = secure_url
+            db.session.commit()
+            return jsonify({'secure_url': secure_url, 'message': 'Profile image updated successfully'}), 200
+        else:
+            return jsonify({'error': 'User not found'}), 404
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
+# @app.route('/update-profile-image', methods=['POST'])
+# def update_profile_image():
+#     data = request.json
+#     user_id = data.get('user_id')
+#     profile_image = data.get('profileImage')
+
+#     if update_user_profile_image(user_id, profile_image):
+#         return jsonify({'message': 'Profile image updated successfully'}), 200
+    
+#     return jsonify({'error': 'User not found'}), 404
+
+# def update_user_profile_image(user_id, profile_image):
+#     user = crud.get_user_by_id(user_id)
+#     if user:
+#         user.profile_image = profile_image
+#         db.session.commit()
+#         return True
+#     return False
+
 @app.route('/update-profile-image', methods=['POST'])
 def update_profile_image():
-    data = request.json
-    user_id = data.get('user_id')
-    profile_image = data.get('profileImage')
+    try:
+        data = request.json
+        user_id = data.get('user_id')
+        profile_image = data.get('profileImage')
 
-    if update_user_profile_image(user_id, profile_image):
-        return jsonify({'message': 'Profile image updated successfully'}), 200
-    
-    return jsonify({'error': 'User not found'}), 404
+        if not user_id or not profile_image:
+            return jsonify({'error': 'Invalid input'}), 400
+
+        if update_user_profile_image(user_id, profile_image):
+            return jsonify({'message': 'Profile image updated successfully'}), 200
+        
+        return jsonify({'error': 'User not found'}), 404
+    except Exception as e:
+        app.logger.error(f"Error in update_profile_image: {e}")
+        return jsonify({'error': 'Internal server error'}), 500
 
 def update_user_profile_image(user_id, profile_image):
-    user = crud.get_user_by_id(user_id)
-    if user:
-        user.profile_image = profile_image
-        db.session.commit()
-        return True
-    return False
+    try:
+        user = crud.get_user_by_id(user_id)
+        if user:
+            user.profile_image = profile_image
+            db.session.commit()
+            return True
+        return False
+    except Exception as e:
+        app.logger.error(f"Error in update_user_profile_image: {e}")
+        return False
 
 
 # DASHBOARD
@@ -152,6 +195,7 @@ def profile():
                 "email": user.email,
                 "team": user.team,
                 "role": user.role,
+                "profileImage": user.profile_image,
                 "current_projects": curr_projects_data
                 # "previous_projects": user.previous_projects  # Assuming these fields exist - will likely need to add "completion status" to model.py
             }), 200
