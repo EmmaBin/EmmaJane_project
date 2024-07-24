@@ -116,55 +116,6 @@ def upload_image():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
     
-# @app.route('/update-profile-image', methods=['POST'])
-# def update_profile_image():
-#     data = request.json
-#     user_id = data.get('user_id')
-#     profile_image = data.get('profileImage')
-
-#     if update_user_profile_image(user_id, profile_image):
-#         return jsonify({'message': 'Profile image updated successfully'}), 200
-    
-#     return jsonify({'error': 'User not found'}), 404
-
-# def update_user_profile_image(user_id, profile_image):
-#     user = crud.get_user_by_id(user_id)
-#     if user:
-#         user.profile_image = profile_image
-#         db.session.commit()
-#         return True
-#     return False
-
-@app.route('/update-profile-image', methods=['POST'])
-def update_profile_image():
-    try:
-        data = request.json
-        user_id = data.get('user_id')
-        profile_image = data.get('profileImage')
-
-        if not user_id or not profile_image:
-            return jsonify({'error': 'Invalid input'}), 400
-
-        if update_user_profile_image(user_id, profile_image):
-            return jsonify({'message': 'Profile image updated successfully'}), 200
-        
-        return jsonify({'error': 'User not found'}), 404
-    except Exception as e:
-        app.logger.error(f"Error in update_profile_image: {e}")
-        return jsonify({'error': 'Internal server error'}), 500
-
-def update_user_profile_image(user_id, profile_image):
-    try:
-        user = crud.get_user_by_id(user_id)
-        if user:
-            user.profile_image = profile_image
-            db.session.commit()
-            return True
-        return False
-    except Exception as e:
-        app.logger.error(f"Error in update_user_profile_image: {e}")
-        return False
-
 
 # DASHBOARD
 @app.route("/dashboard", methods=['GET'])

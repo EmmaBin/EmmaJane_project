@@ -55,8 +55,6 @@ const ProfileCard = () => {
             const data = await response.json();
             if (data.secure_url) {
                 setProfileImage(data.secure_url);
-                // Update profile image in backend
-                await updateProfileImageOnServer(data.secure_url);
             } else {
                 throw new Error('Image upload failed, secure_url not found');
             }
@@ -65,37 +63,6 @@ const ProfileCard = () => {
             // Handle error appropriately
         }
     };
-
-    const updateProfileImageOnServer = async (secureUrl) => {
-        try {
-            // Check if user.user_id is defined
-            if (!user || !user.id) {
-                throw new Error('User ID is not defined');
-            }
-    
-            console.log('Sending request to server with user ID:', user.id, 'and secure URL:', secureUrl);
-    
-            const response = await fetch('/update-profile-image', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ user_id: user.id, profileImage: secureUrl }), 
-            });
-    
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Failed to update profile image: ${errorText}`);
-            }
-    
-            const result = await response.json();
-            console.log('Profile image updated successfully:', result.message);
-        } catch (error) {
-            console.error('Error updating profile image:', error.message);
-            // Handle error appropriately (e.g., show error message to user)
-        }
-    };
-    
 
     if (!user) {
         return <div>Loading...</div>;
