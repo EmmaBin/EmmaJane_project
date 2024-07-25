@@ -51,6 +51,27 @@
     justify-content: center;
 }
 
+.nav {
+    background-color: #D7D8D4;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.nav-button {
+    background-color: transparent;
+    color: #606778;
+    padding: 10px 20px;
+    margin: 0 10px;
+    cursor: pointer;
+    border: none;
+}
+
+.nav-button.active {
+    color: black;
+}
+
 .window-section {
     width: 100%;
     max-width: 800px;

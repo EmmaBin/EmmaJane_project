@@ -19,6 +19,7 @@ const Tasks = () => {
     const { selectedShapes, setSelectedShapes } = useContext(AppContext);
     const [editMode, setEditMode] = useState(selectedShapes.map(() => false));
     const [isContinueActive, setIsContinueActive] = useState(false);
+    const [activeTab, setActiveTab] = useState('Windows');
 
     useEffect(() => {
         // Check if selectedShapes is not empty to enable Continue button
@@ -55,46 +56,69 @@ const Tasks = () => {
 
     return (
         <div className="tasks-container">
-            <div className="header">
-                <h2>{pname}</h2>
-                <div className="icon-container">
-                    <MdModeEdit className="custom-icon" size={14} />
-                </div>
-                <h3>{address}</h3>
+            <div className="nav">
+                <button
+                    className={`nav-button ${activeTab === 'Windows' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('Windows')}
+                >
+                    Windows
+                </button>
+                <button
+                    className={`nav-button ${activeTab === 'Teams' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('Teams')}
+                >
+                    Teams
+                </button>
             </div>
-            <div className="window-section">
-                <div className="window-header">
-                    <label>Windows</label>
-                    <TaskPopUp />
-                </div>
-                <div className="selected-shapes">
-                    {selectedShapes.map((shapeIndex, idx) => (
-                        <div key={idx} className="shape-item">
-                            <div className="shape-container">
-                                <img src={shapes[shapeIndex]} alt={`Selected Shape ${shapeIndex}`} />
-                                <MdModeEdit className="edit-icon custom-icon" size={14} />
-                            </div>
-                            <div className="shape-details">
-                                <div className="shape-info">
-                                    <span className="shape-name">Rectangle</span>
-                                    <input type="text" placeholder="Name window" className="shape-input" disabled={!editMode[idx]} />
-                                </div>
-                                <div className="shape-actions">
-                                    {editMode[idx] ? (
-                                        <>
-                                            <button className="cancel-btn" onClick={() => toggleEditMode(idx)}>Cancel</button>
-                                            <button className="save-btn" onClick={() => toggleEditMode(idx)}>Save</button>
-                                            <button className="delete-btn" onClick={() => toggleEditMode(idx, true)}>Delete</button>
-                                        </>
-                                    ) : (
-                                        <button className="edit-btn" onClick={() => toggleEditMode(idx)}>Edit</button>
-                                    )}
-                                </div>
-                            </div>
+
+            {activeTab === 'Windows' ? (
+                <div className="window-section">
+                    <div className="header">
+                        <h2>{pname}</h2>
+                        <div className="icon-container">
+                            <MdModeEdit className="custom-icon" size={14} />
                         </div>
-                    ))}
+                        <h3>{address}</h3>
+                    </div>
+                    <div className="window-header">
+                        <label>Windows</label>
+                        <TaskPopUp />
+                    </div>
+                    <div className="selected-shapes">
+                        {selectedShapes.map((shapeIndex, idx) => (
+                            <div key={idx} className="shape-item">
+                                <div className="shape-container">
+                                    <img src={shapes[shapeIndex]} alt={`Selected Shape ${shapeIndex}`} />
+                                    <MdModeEdit className="edit-icon custom-icon" size={14} />
+                                </div>
+                                <div className="shape-details">
+                                    <div className="shape-info">
+                                        <span className="shape-name">Rectangle</span>
+                                        <input type="text" placeholder="Name window" className="shape-input" disabled={!editMode[idx]} />
+                                    </div>
+                                    <div className="shape-actions">
+                                        {editMode[idx] ? (
+                                            <>
+                                                <button className="cancel-btn" onClick={() => toggleEditMode(idx)}>Cancel</button>
+                                                <button className="save-btn" onClick={() => toggleEditMode(idx)}>Save</button>
+                                                <button className="delete-btn" onClick={() => toggleEditMode(idx, true)}>Delete</button>
+                                            </>
+                                        ) : (
+                                            <button className="edit-btn" onClick={() => toggleEditMode(idx)}>Edit</button>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            </div>
+            ) : (
+                <div className="teams-section">
+                    {/* Render Teams content here */}
+                    <h2>Teams Section</h2>
+                    {/* Add your Teams section code here */}
+                </div>
+            )}
             <button className={`continue-btn ${isContinueActive ? 'active' : ''}`} disabled={!isContinueActive}>
                 Continue
             </button>
