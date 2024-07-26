@@ -64,6 +64,10 @@ const ProfileCard = () => {
         }
     };
 
+    const handleViewJob = (projectId) => {
+        navigate(`/project/${projectId}`);
+    };
+
     if (!user) {
         return <div>Loading...</div>;
     }
@@ -110,7 +114,11 @@ const ProfileCard = () => {
                                             <div className="project-title">{project.pname}</div>
                                             <div className="project-location">{project.address}</div>
                                         </div>
-                                        <button className="view-job-btn">View job</button>
+                                        <button className="view-job-btn"
+                                            onClick={() => handleViewJob(project.id)}
+                                        >
+                                            View job
+                                        </button>
                                     </div>
                                 </li>
                             ))}
