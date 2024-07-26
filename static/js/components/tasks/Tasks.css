@@ -1,3 +1,35 @@
+.current-tasks,
+.previous-tasks {
+    margin-bottom: 20px;
+}
+
+.summary-container {
+    font-size: 16px;
+    color: #B1B1B1;
+}
+
+.summary-container {
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    color: #59606F;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #B1B1B1;
+    position: relative;
+}
+
+.project-arrow::before {
+    content: '';
+    border: solid #535967;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 5px;
+    transform: rotate(45deg);
+    transition: transform 0.3s ease;
+}
+
 .tasks-container {
     display: flex;
     flex-direction: column;

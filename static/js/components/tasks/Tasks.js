@@ -20,19 +20,31 @@ const Tasks = () => {
     const [editMode, setEditMode] = useState(selectedShapes.map(() => false));
     const [isContinueActive, setIsContinueActive] = useState(false);
     const [activeTab, setActiveTab] = useState('Windows');
+    const [tasks, setTasks] = useState([]);
 
     useEffect(() => {
         // Check if selectedShapes is not empty to enable Continue button
         setIsContinueActive(selectedShapes.length > 0);
     }, [selectedShapes]);
 
-    // const toggleEditMode = (index) => {
-    //     setEditMode((prevEditMode) => {
-    //         const newEditMode = [...prevEditMode];
-    //         newEditMode[index] = !newEditMode[index];
-    //         return newEditMode;
-    //     });
-    // };
+    useEffect(() => {
+        // Fetch tasks for the project
+        const fetchTasks = async () => {
+            try {
+                const response = await fetch(`/project/${projectId}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log('Fetched tasks:', data); // Debugging line
+                setTasks(Array.isArray(data) ? data : []);
+            } catch (error) {
+                console.error('Error fetching tasks:', error);
+            }
+        };
+        
+        fetchTasks();
+    }, [projectId]);
 
     const toggleEditMode = (index, isDelete = false) => {
         if (isDelete) {
@@ -80,6 +92,37 @@ const Tasks = () => {
                         </div>
                         <h3>{address}</h3>
                     </div>
+
+
+                    <div className="tasks">
+                        <div className="current-tasks">
+                            <details>
+                                <summary className="summary-container">
+                                    <div className='summary-title'>Current Windows</div>
+                                    <span className="project-arrow"></span>
+                                </summary>
+
+                                <ul>
+                                    {tasks.map((task) => (
+                                        <li key={task.id}>
+                                            <div className="task-info">
+                                                <div className="task-details">
+                                                    <div className="task-title">{task.tname}</div>
+                                                    <div className="task-assigned">{task.date_assigned}</div>
+                                                    <div className="task-status">{task.status}</div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </details>
+                        </div>
+                    </div>
+
+
+
+
+
                     <div className="window-header">
                         <label>Windows</label>
                         <TaskPopUp />

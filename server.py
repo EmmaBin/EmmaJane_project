@@ -213,10 +213,20 @@ def add_project():
     return jsonify({"project_id": project.project_id}), 201
 
 @app.route('/project/<project_id>', methods=['GET'])
-def tasks_page():
+def get_tasks(project_id):
     """Tasks Page"""
 
-    return jsonify({"Page accessed!"}), 201
+    tasks = crud.get_tasks_by_project_id(project_id)
+
+    tasks_list = [{
+        "id": task.id, 
+        "tname": task.tname,
+        "date_assigned": task.date_assigned,
+        "status": task.status
+    } for task in tasks]
+    return jsonify(tasks_list), 200
+    
+
 
 
 if __name__ == "__main__":

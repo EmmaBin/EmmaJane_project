@@ -67,7 +67,8 @@ def get_tasks_by_project_id(project_id):
 
     tasks = Task.query.filter(Task.project_id==project_id).all()
 
-    return {task.task_id: task.to_dict() for task in tasks}
+    # return {task.task_id: task.to_dict() for task in tasks}
+    return [task.to_dict() for task in tasks]
 
 
 if __name__ == '__main__':
