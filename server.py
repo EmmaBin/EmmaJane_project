@@ -217,6 +217,7 @@ def get_tasks(project_id):
     """Tasks Page"""
 
     tasks = crud.get_tasks_by_project_id(project_id)
+    project_members = crud.get_members_by_project(project_id)
 
     tasks_list = [{
         "id": task.id, 
@@ -224,10 +225,18 @@ def get_tasks(project_id):
         "date_assigned": task.date_assigned,
         "status": task.status
     } for task in tasks]
-    return jsonify(tasks_list), 200
+
+    members_list = [{
+        "id": user["user_id"],
+        "fname": user["fname"],
+        "lname": user["lname"],
+        "email": user["email"],
+        "team": user["team"],
+        "role": user["role"]
+    } for user in project_members]
+
+    return jsonify({"tasks": tasks_list, "members": members_list}), 200
     
-
-
 
 if __name__ == "__main__":
     connect_to_db(app)

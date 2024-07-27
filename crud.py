@@ -35,6 +35,12 @@ def get_members_by_team(team):
 
     return User.query.filter(User.team == str(team)).all()
 
+def get_members_by_project(project_id):
+    """Return a list of users on a specific project"""
+    user_projects = UserProject.query.filter_by(project_id=project_id).all()
+    user_ids = [up.user_id for up in user_projects]
+    users = User.query.filter(User.user_id.in_(user_ids)).all()
+    return [user.to_dict() for user in users]
 
 # PROJECT-RELATED
 

@@ -21,43 +21,63 @@ const Tasks = () => {
     const [isContinueActive, setIsContinueActive] = useState(false);
     const [activeTab, setActiveTab] = useState('Windows');
     const [tasks, setTasks] = useState([]);
+    const [members, setMembers] = useState([]);
 
     useEffect(() => {
         // Check if selectedShapes is not empty to enable Continue button
         setIsContinueActive(selectedShapes.length > 0);
     }, [selectedShapes]);
 
+    // useEffect(() => {
+    //     // Fetch tasks for the project
+    //     const fetchTasks = async () => {
+    //         try {
+    //             const response = await fetch(`/project/${projectId}`);
+    //             if (!response.ok) {
+    //                 throw new Error(`HTTP error! Status: ${response.status}`);
+    //             }
+    //             const data = await response.json();
+    //             console.log('Fetched tasks:', data); // Debugging line
+    //             setTasks(Array.isArray(data) ? data : []);
+    //         } catch (error) {
+    //             console.error('Error fetching tasks:', error);
+    //         }
+    //     };
+        
+    //     fetchTasks();
+    // }, [projectId]);
+
     useEffect(() => {
-        // Fetch tasks for the project
-        const fetchTasks = async () => {
+        // Fetch tasks and members for the project
+        const fetchProjectData = async () => {
             try {
                 const response = await fetch(`/project/${projectId}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 const data = await response.json();
-                console.log('Fetched tasks:', data); // Debugging line
-                setTasks(Array.isArray(data) ? data : []);
+                console.log('Fetched project data:', data); // Debugging line
+                setTasks(data.tasks || []);
+                setMembers(data.members || []);
             } catch (error) {
-                console.error('Error fetching tasks:', error);
+                console.error('Error fetching project data:', error);
             }
         };
-        
-        fetchTasks();
+    
+        fetchProjectData();
     }, [projectId]);
+
 
     const toggleEditMode = (index, isDelete = false) => {
         if (isDelete) {
-            // Handle delete operation
             setSelectedShapes((prevSelectedShapes) =>
                 prevSelectedShapes.filter((_, idx) => idx !== index)
             );
-
+    
             setEditMode((prevEditMode) =>
                 prevEditMode.filter((_, idx) => idx !== index)
             );
         } else {
-            // Toggle edit mode
             setEditMode((prevEditMode) => {
                 const newEditMode = [...prevEditMode];
                 newEditMode[index] = !newEditMode[index];
@@ -65,6 +85,26 @@ const Tasks = () => {
             });
         }
     };
+
+    // const toggleEditMode = (index, isDelete = false) => {
+    //     if (isDelete) {
+    //         // Handle delete operation
+    //         setSelectedShapes((prevSelectedShapes) =>
+    //             prevSelectedShapes.filter((_, idx) => idx !== index)
+    //         );
+
+    //         setEditMode((prevEditMode) =>
+    //             prevEditMode.filter((_, idx) => idx !== index)
+    //         );
+    //     } else {
+    //         // Toggle edit mode
+    //         setEditMode((prevEditMode) => {
+    //             const newEditMode = [...prevEditMode];
+    //             newEditMode[index] = !newEditMode[index];
+    //             return newEditMode;
+    //         });
+    //     }
+    // };
 
     return (
         <div className="tasks-container">
@@ -157,9 +197,21 @@ const Tasks = () => {
                 </div>
             ) : (
                 <div className="teams-section">
-                    {/* Render Teams content here */}
                     <h2>Teams Section</h2>
-                    {/* Add your Teams section code here */}
+                    <ul>
+                        {members.map((member) => (
+                            <li key={member.id}>
+                                <div className="member-info">
+                                    <div className="member-details">
+                                        <div className="member-name">{member.fname} {member.lname}</div>
+                                        <div className="member-email">{member.email}</div>
+                                        <div className="member-team">{member.team}</div>
+                                        <div className="member-role">{member.role}</div>
+                                    </div>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             )}
             <button className={`continue-btn ${isContinueActive ? 'active' : ''}`} disabled={!isContinueActive}>
