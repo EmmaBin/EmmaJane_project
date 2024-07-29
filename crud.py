@@ -1,7 +1,7 @@
 from model import (db,
-    User, Project, Task,
-    UserProject, UserTask, 
-    connect_to_db)
+                   User, Project, Task,
+                   UserProject, UserTask,
+                   connect_to_db)
 
 import datetime
 
@@ -12,7 +12,8 @@ def create_user(fname, lname, email, password, team, role):
     """Create and return a new user."""
 
     return User(fname=fname, lname=lname, email=email, password=password, team=team, role=role)
-    
+
+
 def get_user_by_id(user_id):
     """Return user info by id"""
 
@@ -25,15 +26,18 @@ def get_user_by_id(user_id):
     #     print("User not found")
     # return user
 
+
 def get_user_by_email(email):
     """Return a user with inputted email"""
 
     return User.query.filter(User.email == email).first()
 
+
 def get_members_by_team(team):
     """Return a list of users on a specific team"""
 
     return User.query.filter(User.team == str(team)).all()
+
 
 def get_members_by_project(project_id):
     """Return a list of users on a specific project"""
@@ -43,6 +47,7 @@ def get_members_by_project(project_id):
     return [user.to_dict() for user in users]
 
 # PROJECT-RELATED
+
 
 def create_new_project(pname, address):
     """Create new project"""
@@ -57,10 +62,12 @@ def create_userproject(user_id, project_id):
 
     return UserProject(user_id=user_id, project_id=project_id)
 
+
 def get_projects_by_user_id(user_id):
     """Return all projects of a user id"""
 
-    user_projects = UserProject.query.filter(UserProject.user_id==user_id).all()
+    user_projects = UserProject.query.filter(
+        UserProject.user_id == user_id).all()
     projects = [user_project.project for user_project in user_projects]
 
     return [project.to_dict() for project in projects]
@@ -71,10 +78,26 @@ def get_projects_by_user_id(user_id):
 def get_tasks_by_project_id(project_id):
     """Return all tasks of a project id for Admin Use"""
 
-    tasks = Task.query.filter(Task.project_id==project_id).all()
+    tasks = Task.query.filter(Task.project_id == project_id).all()
 
     # return {task.task_id: task.to_dict() for task in tasks}
     return [task.to_dict() for task in tasks]
+
+# Task-related
+
+
+def get_project_by_id(project_id):
+    """Retrieve a project by its ID."""
+    return Project.query.get(project_id)
+
+
+def create_task_object(tname, status, project_id):
+    """Create a new task object associated with a project."""
+    return Task(
+        tname=tname,
+        status=status,
+        project_id=project_id
+    )
 
 
 if __name__ == '__main__':

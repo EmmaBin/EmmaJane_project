@@ -22,11 +22,22 @@ const Tasks = () => {
     const [activeTab, setActiveTab] = useState('Windows');
     const [tasks, setTasks] = useState([]);
     const [members, setMembers] = useState([]);
+    const [windowNames, setWindowNames] = useState(selectedShapes.map(() => ""));
 
+    //changes made here
     useEffect(() => {
-        // Check if selectedShapes is not empty to enable Continue button
-        setIsContinueActive(selectedShapes.length > 0);
-    }, [selectedShapes]);
+        // Enable the "Continue" button only if all window names are filled
+        const allNamesFilled = windowNames.every(name => name.trim() !== "");
+        console.log("Checking window names:", windowNames, "All names filled:", allNamesFilled);
+        setIsContinueActive(allNamesFilled);
+    }, [windowNames]);
+
+
+
+    // useEffect(() => {
+    //     // Check if selectedShapes is not empty to enable Continue button
+    //     setIsContinueActive(selectedShapes.length > 0);
+    // }, [selectedShapes]);
 
     // useEffect(() => {
     //     // Fetch tasks for the project
@@ -43,7 +54,7 @@ const Tasks = () => {
     //             console.error('Error fetching tasks:', error);
     //         }
     //     };
-        
+
     //     fetchTasks();
     // }, [projectId]);
 
@@ -63,7 +74,7 @@ const Tasks = () => {
                 console.error('Error fetching project data:', error);
             }
         };
-    
+
         fetchProjectData();
     }, [projectId]);
 
@@ -73,7 +84,9 @@ const Tasks = () => {
             setSelectedShapes((prevSelectedShapes) =>
                 prevSelectedShapes.filter((_, idx) => idx !== index)
             );
-    
+            setWindowNames((prevNames) =>
+                prevNames.filter((_, idx) => idx !== index)
+            );
             setEditMode((prevEditMode) =>
                 prevEditMode.filter((_, idx) => idx !== index)
             );
@@ -86,25 +99,57 @@ const Tasks = () => {
         }
     };
 
-    // const toggleEditMode = (index, isDelete = false) => {
-    //     if (isDelete) {
-    //         // Handle delete operation
-    //         setSelectedShapes((prevSelectedShapes) =>
-    //             prevSelectedShapes.filter((_, idx) => idx !== index)
-    //         );
 
-    //         setEditMode((prevEditMode) =>
-    //             prevEditMode.filter((_, idx) => idx !== index)
-    //         );
-    //     } else {
-    //         // Toggle edit mode
-    //         setEditMode((prevEditMode) => {
-    //             const newEditMode = [...prevEditMode];
-    //             newEditMode[index] = !newEditMode[index];
-    //             return newEditMode;
-    //         });
-    //     }
-    // };
+    const handleNameChange = (index, value) => {
+        setWindowNames((prevNames) => {
+            const newNames = [...prevNames];
+            newNames[index] = value;
+            return newNames;
+        });
+    };
+    const handleContinue = async () => {
+        console.log("handleContinue called");
+        console.log("isContinueActive:", isContinueActive);
+
+        if (!isContinueActive) {
+            console.log("Continue button disabled; not all fields filled");
+            return;
+        }
+
+
+        const projectData = {
+            project_id: projectId,
+            pname,
+            address,
+            tasks: selectedShapes.map((index, i) => ({
+                shapeIndex: index,
+                name: windowNames[i],  // Ensure windowNames are populated
+                status: "Not Started"
+            }))
+        };
+
+        try {
+            console.log("Sending data to server:", projectData);
+            const response = await fetch(`/project/${projectId}/tasks`, {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(projectData),
+            });
+
+            const data = await response.json();
+            console.log('Server response data:', data);
+
+            if (!response.ok) {
+                console.error('Failed to add tasks', response.status);
+            }
+        } catch (error) {
+            console.error('Error in handleContinue:', error);
+        }
+    };
+
 
     return (
         <div className="tasks-container">
@@ -176,8 +221,14 @@ const Tasks = () => {
                                 </div>
                                 <div className="shape-details">
                                     <div className="shape-info">
-                                        <span className="shape-name">Rectangle</span>
-                                        <input type="text" placeholder="Name window" className="shape-input" disabled={!editMode[idx]} />
+                                        <span className="shape-name">Shape {idx + 1}</span>
+                                        <input
+                                            type="text"
+                                            placeholder="Name window"
+                                            className="shape-input"
+                                            value={windowNames[idx]}
+                                            onChange={(e) => handleNameChange(idx, e.target.value)}
+                                        />
                                     </div>
                                     <div className="shape-actions">
                                         {editMode[idx] ? (
@@ -214,7 +265,9 @@ const Tasks = () => {
                     </ul>
                 </div>
             )}
-            <button className={`continue-btn ${isContinueActive ? 'active' : ''}`} disabled={!isContinueActive}>
+            <button className={`continue-btn ${isContinueActive ? 'active' : ''}`}
+                disabled={!isContinueActive}
+                onClick={handleContinue}>
                 Continue
             </button>
         </div>
