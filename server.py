@@ -223,10 +223,11 @@ def get_tasks(project_id):
     project_members = crud.get_members_by_project(project_id)
 
     tasks_list = [{
-        "id": task.id,
-        "tname": task.tname,
-        "date_assigned": task.date_assigned,
-        "status": task.status
+        "task_id": task["task_id"],
+        "tname": task["tname"],
+        "date_assigned": task["date_assigned"],
+        "status": task["status"],
+        "shape_name": task["shape_name"]
     } for task in tasks]
 
     members_list = [{
@@ -259,6 +260,7 @@ def add_project_tasks(project_id):
                 tname=task_data.get('name'),
                 status=task_data.get('status', 'Not Started'),
                 project_id=project_id,
+                shape_name=task_data.get('shapeName'),
                 date_assigned=datetime.now(),
                 contact_info=task_data.get('contact_info') or "No contact info"
             )
@@ -266,6 +268,7 @@ def add_project_tasks(project_id):
             db.session.commit()
             tasks_created.append(task.to_dict())
             print(f'Task created------------------------: {task.to_dict()}')
+            print(project_id)
 
         # Commit all changes at once
 
