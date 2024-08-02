@@ -4,7 +4,7 @@ from flask import (Flask, render_template, request, flash, session,
 
 from model import connect_to_db, db
 import crud
-import datetime
+from datetime import datetime
 import os
 from dotenv import load_dotenv
 import cloudinary
@@ -258,13 +258,17 @@ def add_project_tasks(project_id):
             task = crud.create_task_object(
                 tname=task_data.get('name'),
                 status=task_data.get('status', 'Not Started'),
-                project_id=project_id
+                project_id=project_id,
+                date_assigned=datetime.now(),
+                contact_info=task_data.get('contact_info') or "No contact info"
             )
             db.session.add(task)  # Add the task object to the session
+            db.session.commit()
             tasks_created.append(task.to_dict())
+            print(f'Task created------------------------: {task.to_dict()}')
 
         # Commit all changes at once
-        db.session.commit()
+
     except Exception as e:
         db.session.rollback()  # Roll back in case of error
         return jsonify({"error": str(e)}), 500
