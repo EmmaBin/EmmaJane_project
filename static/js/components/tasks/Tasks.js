@@ -171,7 +171,7 @@ const Tasks = () => {
 
                                 <ul>
                                     {tasks.map((task) => (
-                                        <li key={task.id}>
+                                        <li key={task.task_id}>
                                             <div className="task-info">
                                                 <div className="task-details">
                                                     <div className="task-title">{task.tname}</div>
