@@ -4,7 +4,7 @@ from flask import (Flask, render_template, request, flash, session,
 
 from model import connect_to_db, db
 import crud
-import datetime
+from datetime import datetime
 import os
 from dotenv import load_dotenv
 import cloudinary
@@ -14,9 +14,9 @@ import cloudinary.api
 load_dotenv()
 
 cloudinary.config(
-    cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME'),
-    api_key = os.getenv('CLOUDINARY_API_KEY'),
-    api_secret = os.getenv('CLOUDINARY_API_SECRET')
+    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
+    api_key=os.getenv('CLOUDINARY_API_KEY'),
+    api_secret=os.getenv('CLOUDINARY_API_SECRET')
 )
 
 app = Flask(__name__)
@@ -115,7 +115,7 @@ def upload_image():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-    
+
 
 # DASHBOARD
 @app.route("/dashboard", methods=['GET'])
@@ -123,7 +123,7 @@ def profile():
     """Profile"""
 
     user_id = session.get('user')
-    
+
     if user_id:
         user = crud.get_user_by_id(user_id)
         projects = crud.get_projects_by_user_id(user_id)
@@ -132,8 +132,8 @@ def profile():
 
             curr_projects_data = [
                 {
-                    "id": project["project_id"],  
-                    "pname": project["pname"],  
+                    "id": project["project_id"],
+                    "pname": project["pname"],
                     "address": project["address"]
                 }
                 for project in projects
@@ -152,6 +152,7 @@ def profile():
             }), 200
 
     return jsonify({"error": "Unauthorized"}), 401
+
 
 @app.route("/team_members", methods=['GET'])
 def members():
@@ -197,7 +198,8 @@ def add_project():
         for member in members:
             user_id = member.get('user_id')
             if user_id:
-                userproject = crud.create_userproject(user_id, project.project_id)
+                userproject = crud.create_userproject(
+                    user_id, project.project_id)
                 db.session.add(userproject)
                 userprojects.append(userproject)
             else:
@@ -212,6 +214,7 @@ def add_project():
 
     return jsonify({"project_id": project.project_id}), 201
 
+
 @app.route('/project/<project_id>', methods=['GET'])
 def get_tasks(project_id):
     """Tasks Page"""
@@ -220,7 +223,7 @@ def get_tasks(project_id):
     project_members = crud.get_members_by_project(project_id)
 
     tasks_list = [{
-        "id": task.id, 
+        "id": task.id,
         "tname": task.tname,
         "date_assigned": task.date_assigned,
         "status": task.status
@@ -236,7 +239,42 @@ def get_tasks(project_id):
     } for user in project_members]
 
     return jsonify({"tasks": tasks_list, "members": members_list}), 200
-    
+
+
+@app.route('/project/<int:project_id>/tasks', methods=['POST'])
+def add_project_tasks(project_id):
+    data = request.json
+
+    # Retrieve the project using CRUD function
+    project = crud.get_project_by_id(project_id)
+    if not project:
+        return jsonify({"error": "Project not found"}), 404
+
+    tasks_data = data.get('tasks', [])
+    tasks_created = []
+    try:
+        for task_data in tasks_data:
+            # Create task object using CRUD function
+            task = crud.create_task_object(
+                tname=task_data.get('name'),
+                status=task_data.get('status', 'Not Started'),
+                project_id=project_id,
+                date_assigned=datetime.now(),
+                contact_info=task_data.get('contact_info') or "No contact info"
+            )
+            db.session.add(task)  # Add the task object to the session
+            db.session.commit()
+            tasks_created.append(task.to_dict())
+            print(f'Task created------------------------: {task.to_dict()}')
+
+        # Commit all changes at once
+
+    except Exception as e:
+        db.session.rollback()  # Roll back in case of error
+        return jsonify({"error": str(e)}), 500
+
+    return jsonify({"message": "Tasks added successfully", "tasks": tasks_created, "project_id": project_id}), 201
+
 
 if __name__ == "__main__":
     connect_to_db(app)
