@@ -11,6 +11,7 @@ import upperLowerBottom from '../../../images/upper_lower_bottom.png';
 import { MdModeEdit } from "react-icons/md";
 
 const shapes = [rectangle, sidewayRectangle, square, upperLowerTop, upperLowerBottom];
+const shapeNames = ["Rectangle", "Sideway Rectangle", "Square", "Upper Lower Top", "Upper Lower Bottom"];
 
 const Tasks = () => {
     const { projectId } = useParams();
@@ -24,39 +25,21 @@ const Tasks = () => {
     const [members, setMembers] = useState([]);
     const [windowNames, setWindowNames] = useState(selectedShapes.map(() => ""));
 
-    //changes made here
     useEffect(() => {
-        // Enable the "Continue" button only if all window names are filled
-        const allNamesFilled = windowNames.every(name => name.trim() !== "");
+        // Ensure windowNames is initialized with the correct number of empty strings
+        setWindowNames(selectedShapes.map((_, idx) => windowNames[idx] || ""));
+    }, [selectedShapes]);
+
+
+    useEffect(() => {
+        // Enable the "Continue" button only if all window names are filled and at least one window is selected
+        const allNamesFilled = windowNames.length > 0 && windowNames.every(name => name.trim() !== "");
         console.log("Checking window names:", windowNames, "All names filled:", allNamesFilled);
         setIsContinueActive(allNamesFilled);
-    }, [windowNames]);
+    }, [windowNames, selectedShapes]);
 
 
 
-    // useEffect(() => {
-    //     // Check if selectedShapes is not empty to enable Continue button
-    //     setIsContinueActive(selectedShapes.length > 0);
-    // }, [selectedShapes]);
-
-    // useEffect(() => {
-    //     // Fetch tasks for the project
-    //     const fetchTasks = async () => {
-    //         try {
-    //             const response = await fetch(`/project/${projectId}`);
-    //             if (!response.ok) {
-    //                 throw new Error(`HTTP error! Status: ${response.status}`);
-    //             }
-    //             const data = await response.json();
-    //             console.log('Fetched tasks:', data); // Debugging line
-    //             setTasks(Array.isArray(data) ? data : []);
-    //         } catch (error) {
-    //             console.error('Error fetching tasks:', error);
-    //         }
-    //     };
-
-    //     fetchTasks();
-    // }, [projectId]);
 
     useEffect(() => {
         // Fetch tasks and members for the project
@@ -67,8 +50,7 @@ const Tasks = () => {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 const data = await response.json();
-                console.log('Fetched project data:', data); // Debugging line
-                setTasks(data.tasks || []);
+                console.log('Fetched project data:', data);
                 setMembers(data.members || []);
             } catch (error) {
                 console.error('Error fetching project data:', error);
@@ -107,6 +89,7 @@ const Tasks = () => {
             return newNames;
         });
     };
+
     const handleContinue = async () => {
         console.log("handleContinue called");
         console.log("isContinueActive:", isContinueActive);
@@ -121,8 +104,8 @@ const Tasks = () => {
             project_id: projectId,
             pname,
             address,
-            tasks: selectedShapes.map((index, i) => ({
-                shapeIndex: index,
+            tasks: selectedShapes.map((shapeIndex, i) => ({
+                shapeName: shapeNames[shapeIndex],  // Use shape name
                 name: windowNames[i],  // Ensure windowNames are populated
                 status: "Not Started"
             }))
@@ -221,13 +204,14 @@ const Tasks = () => {
                                 </div>
                                 <div className="shape-details">
                                     <div className="shape-info">
-                                        <span className="shape-name">Shape {idx + 1}</span>
+                                        <span className="shape-name">{shapeNames[shapeIndex]}</span>
                                         <input
                                             type="text"
                                             placeholder="Name window"
                                             className="shape-input"
                                             value={windowNames[idx]}
                                             onChange={(e) => handleNameChange(idx, e.target.value)}
+                                            disabled={!editMode[idx]}
                                         />
                                     </div>
                                     <div className="shape-actions">
@@ -265,10 +249,12 @@ const Tasks = () => {
                     </ul>
                 </div>
             )}
-            <button className={`continue-btn ${isContinueActive ? 'active' : ''}`}
+            <button
+                className={`continue-btn ${isContinueActive ? 'active' : ''}`}
                 disabled={!isContinueActive}
-                onClick={handleContinue}>
-                Continue
+                onClick={handleContinue}
+            >
+                {isContinueActive ? 'Save' : 'Continue'}
             </button>
         </div>
     );
