@@ -26,7 +26,6 @@ const Tasks = () => {
     const [windowNames, setWindowNames] = useState(selectedShapes.map(() => ""));
 
     useEffect(() => {
-        // Ensure windowNames is initialized with the correct number of empty strings
         setWindowNames(selectedShapes.map((_, idx) => windowNames[idx] || ""));
     }, [selectedShapes]);
 
@@ -34,7 +33,6 @@ const Tasks = () => {
     useEffect(() => {
         // Enable the "Continue" button only if all window names are filled and at least one window is selected
         const allNamesFilled = windowNames.length > 0 && windowNames.every(name => name.trim() !== "");
-        console.log("Checking window names:", windowNames, "All names filled:", allNamesFilled);
         setIsContinueActive(allNamesFilled);
     }, [windowNames, selectedShapes]);
 
@@ -45,13 +43,15 @@ const Tasks = () => {
         // Fetch tasks and members for the project
         const fetchProjectData = async () => {
             try {
+                console.log(`Fetching project data for project ID: ${projectId}`);
                 const response = await fetch(`/project/${projectId}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 const data = await response.json();
                 console.log('Fetched project data:', data);
-                setMembers(data.members || []);
+                setMembers(data.members || [])
+                setTasks(data.tasks || [])
             } catch (error) {
                 console.error('Error fetching project data:', error);
             }
@@ -91,7 +91,6 @@ const Tasks = () => {
     };
 
     const handleContinue = async () => {
-        console.log("handleContinue called");
         console.log("isContinueActive:", isContinueActive);
 
         if (!isContinueActive) {
@@ -106,7 +105,7 @@ const Tasks = () => {
             address,
             tasks: selectedShapes.map((shapeIndex, i) => ({
                 shapeName: shapeNames[shapeIndex],  // Use shape name
-                name: windowNames[i],  // Ensure windowNames are populated
+                name: windowNames[i],
                 status: "Not Started"
             }))
         };

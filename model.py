@@ -13,7 +13,8 @@ class User(db.Model):
 
     __tablename__ = "User"
 
-    user_id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
+    user_id = db.Column(db.Integer, primary_key=True,
+                        autoincrement=True, nullable=False)
     fname = db.Column(db.String, nullable=False)
     lname = db.Column(db.String, nullable=False)
     email = db.Column(db.String, nullable=False, unique=True)
@@ -27,7 +28,7 @@ class User(db.Model):
 
     def __repr__(self):
         return f'<User user_id={self.user_id} fname={self.fname} lname={self.lname} email={self.email} team={self.team} role={self.role} profile_image={self.profile_image}>'
-    
+
     def to_dict(self):
         return {'user_id': self.user_id,
                 'fname': self.fname,
@@ -44,7 +45,8 @@ class Project(db.Model):
 
     __tablename__ = "Project"
 
-    project_id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
+    project_id = db.Column(db.Integer, primary_key=True,
+                           autoincrement=True, nullable=False)
     pname = db.Column(db.String, nullable=False)
     address = db.Column(db.String, nullable=False)
     completed = db.Column(db.Boolean, default=False, nullable=False)
@@ -54,7 +56,7 @@ class Project(db.Model):
 
     def __repr__(self):
         return f'<Project project_id={self.project_id} pname={self.pname} address={self.address}>'
-    
+
     def to_dict(self):
         return {'project_id': self.project_id,
                 'pname': self.pname,
@@ -67,8 +69,10 @@ class UserProject(db.Model):
 
     __tablename__ = "UserProject"
 
-    user_id = db.Column(db.Integer, db.ForeignKey("User.user_id"), primary_key=True)
-    project_id = db.Column(db.Integer, db.ForeignKey("Project.project_id"), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey(
+        "User.user_id"), primary_key=True)
+    project_id = db.Column(db.Integer, db.ForeignKey(
+        "Project.project_id"), primary_key=True)
     __table_args__ = (db.PrimaryKeyConstraint('user_id', 'project_id'),)
 
     user = db.relationship("User", back_populates="user_projects")
@@ -76,33 +80,37 @@ class UserProject(db.Model):
 
     def __repr__(self):
         return f'<UserProject user_id={self.user_id} project_id={self.project_id}>'
-    
+
     def to_dict(self):
         return {
             'user_id': self.user_id,
             'project_id': self.project_id
         }
 
+
 class Task(db.Model):
     """Task"""
 
     __tablename__ = "Task"
 
-    task_id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
+    task_id = db.Column(db.Integer, primary_key=True,
+                        autoincrement=True, nullable=False)
     tname = db.Column(db.String, nullable=True)
     date_assigned = db.Column(db.DateTime, nullable=True)
     date_completed = db.Column(db.DateTime, nullable=True)
     contact_info = db.Column(db.String, nullable=True)
     status = db.Column(db.String, nullable=False)
+    shape_name = db.Column(db.String, nullable=False)
 
-    project_id = db.Column(db.Integer, db.ForeignKey('Project.project_id'), nullable=False) 
+    project_id = db.Column(db.Integer, db.ForeignKey(
+        'Project.project_id'), nullable=False)
 
     project = db.relationship("Project", back_populates="tasks")
     user_task = db.relationship("UserTask", back_populates="task")
 
     def __repr__(self):
         return f'<Task task_id={self.task_id} tname={self.tname} date_assigned={self.date_assigned} status={self.status}>'
-    
+
     def to_dict(self):
         return {
             'task_id': self.task_id,
@@ -111,16 +119,20 @@ class Task(db.Model):
             'date_completed': self.date_completed,
             'contact_info': self.contact_info,
             'status': self.status,
+            'shape_name': self.shape_name,
             'project_id': self.project_id
         }
+
 
 class UserTask(db.Model):
     """UserTask"""
 
     __tablename__ = "UserTask"
 
-    user_id = db.Column(db.Integer, db.ForeignKey("User.user_id"), primary_key=True)
-    task_id = db.Column(db.Integer, db.ForeignKey("Task.task_id"), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey(
+        "User.user_id"), primary_key=True)
+    task_id = db.Column(db.Integer, db.ForeignKey(
+        "Task.task_id"), primary_key=True)
     __table_args__ = (db.PrimaryKeyConstraint('user_id', 'task_id'),)
 
     user = db.relationship("User", back_populates="user_task")
@@ -128,7 +140,7 @@ class UserTask(db.Model):
 
     def __repr__(self):
         return f'<UserTask user_id={self.user_id} task_id={self.task_id}>'
-    
+
     def to_dict(self):
         return {
             'user_id': self.user_id,
@@ -150,5 +162,4 @@ def connect_to_db(flask_app, db_uri="postgresql:///windows", echo=True):
 if __name__ == "__main__":
     from server import app
 
-     
     connect_to_db(app)

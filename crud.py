@@ -91,12 +91,13 @@ def get_project_by_id(project_id):
     return Project.query.get(project_id)
 
 
-def create_task_object(tname, status, project_id, date_assigned=None, contact_info=None):
+def create_task_object(tname, status, project_id, shape_name, date_assigned=None, contact_info=None):
     """Create a new task object associated with a project."""
     return Task(
         tname=tname,
         status=status,
         project_id=project_id,
+        shape_name=shape_name,
         date_assigned=date_assigned or datetime.now(),
         contact_info=contact_info or "No contact info"
     )
