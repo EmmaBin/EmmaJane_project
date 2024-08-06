@@ -65,7 +65,7 @@ const ProfileCard = () => {
     };
 
     const handleViewJob = (projectId) => {
-        navigate(`/project/${projectId}`);
+        navigate(`/project/${projectId}/view_job`);
     };
 
     if (!user) {
