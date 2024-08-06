@@ -60,6 +60,19 @@ def create_new_project(pname, address):
     return Project(pname=pname, address=address)
 
 
+def update_project(project_id, pname=None, address=None):
+    """Update project details."""
+    project = get_project_by_id(project_id)
+    if project:
+        if pname is not None:
+            project.pname = pname
+        if address is not None:
+            project.address = address
+        db.session.commit()
+        return project
+    return None
+
+
 # USERPROJECT-RELATED
 
 def create_userproject(user_id, project_id):

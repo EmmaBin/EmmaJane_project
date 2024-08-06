@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import TaskPopUp from './TaskPopUp';
 import { AppContext } from '../../AppContext';
 import './Tasks.css';
@@ -24,6 +24,8 @@ const Tasks = () => {
     const [tasks, setTasks] = useState([]);
     const [members, setMembers] = useState([]);
     const [windowNames, setWindowNames] = useState(selectedShapes.map(() => ""));
+    const navigate = useNavigate();
+    const [projectInfo, setProjectInfo] = useState([])
 
     useEffect(() => {
         setWindowNames(selectedShapes.map((_, idx) => windowNames[idx] || ""));
@@ -52,6 +54,7 @@ const Tasks = () => {
                 console.log('Fetched project data:', data);
                 setMembers(data.members || [])
                 setTasks(data.tasks || [])
+                setProjectInfo(data.project)
             } catch (error) {
                 console.error('Error fetching project data:', error);
             }
@@ -60,6 +63,15 @@ const Tasks = () => {
         fetchProjectData();
     }, [projectId]);
 
+    const handleEditPname = () => {
+        navigate(`/project/${projectId}/edit_pname`, {
+            state: {
+                projectId,
+                pname: projectInfo.pname,
+                address: projectInfo.address
+            }
+        });
+    };
 
     const toggleEditMode = (index, isDelete = false) => {
         if (isDelete) {
@@ -155,7 +167,7 @@ const Tasks = () => {
                     <div className="header">
                         <h2>{pname}</h2>
                         <div className="icon-container">
-                            <MdModeEdit className="custom-icon" size={14} />
+                            <MdModeEdit className="custom-icon" size={14} onClick={handleEditPname} />
                         </div>
                         <h3>{address}</h3>
                     </div>

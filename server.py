@@ -256,6 +256,21 @@ def get_tasks(project_id):
     return jsonify({"tasks": tasks_list, "members": members_list, "project": project.to_dict()}), 200
 
 
+@app.route('/project/<int:project_id>', methods=['PUT'])
+def update_project_api(project_id):
+    data = request.json
+    pname = data.get('pname')
+    address = data.get('address')
+
+    project = crud.update_project(project_id, pname=pname, address=address)
+    if project:
+        print(f"New pname: {pname}###########################")
+        print(f"New address: {address}#############################")
+        return jsonify(project.to_dict()), 200
+    else:
+        return jsonify({'error': 'Project not found'}), 404
+
+
 @app.route('/project/<int:project_id>/tasks', methods=['POST'])
 def add_project_tasks(project_id):
     data = request.json
