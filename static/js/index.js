@@ -11,6 +11,7 @@ import Login from './components/login/Login';
 import Register from './components/register/Register';
 import NewProject from './components/add_new_project/NewProject'
 import Tasks from './components/tasks/Tasks'
+import ViewJob from './components/view_job/ViewJob'
 import { AppProvider } from './AppContext';
 
 const root = createRoot(document.getElementById('main'));
@@ -24,6 +25,7 @@ function App() {
                 <Route path="/dashboard" element={<ProfileCard />} />
                 <Route path="/:fname/project" element={<NewProject />} />
                 <Route path="/project/:projectId" element={<Tasks />} />
+                <Route path="/project/:projectId/view_job" element={<ViewJob />} />
 
             </Routes>
         </Router>

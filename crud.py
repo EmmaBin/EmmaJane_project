@@ -103,6 +103,34 @@ def create_task_object(tname, status, project_id, shape_name, date_assigned=None
     )
 
 
+def get_task_by_id(task_id):
+    """Retrieve a task by its ID."""
+    return Task.query.get(task_id)
+
+
+def update_task(task_id, tname=None, status=None):
+    """Update task details."""
+    task = get_task_by_id(task_id)
+    if task:
+        if tname is not None:
+            task.tname = tname
+        if status is not None:
+            task.status = status
+        db.session.commit()
+        return task
+    return None
+
+
+def delete_task(task_id):
+    """Delete a task by its ID."""
+    task = get_task_by_id(task_id)
+    if task:
+        db.session.delete(task)
+        db.session.commit()
+        return task
+    return None
+
+
 if __name__ == '__main__':
     from server import app
     connect_to_db(app)

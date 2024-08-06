@@ -221,6 +221,7 @@ def get_tasks(project_id):
 
     tasks = crud.get_tasks_by_project_id(project_id)
     project_members = crud.get_members_by_project(project_id)
+    project = crud.get_project_by_id(project_id)
 
     tasks_list = [{
         "task_id": task["task_id"],
@@ -239,7 +240,7 @@ def get_tasks(project_id):
         "role": user["role"]
     } for user in project_members]
 
-    return jsonify({"tasks": tasks_list, "members": members_list}), 200
+    return jsonify({"tasks": tasks_list, "members": members_list, "project": project.to_dict()}), 200
 
 
 @app.route('/project/<int:project_id>/tasks', methods=['POST'])
@@ -277,6 +278,24 @@ def add_project_tasks(project_id):
         return jsonify({"error": str(e)}), 500
 
     return jsonify({"message": "Tasks added successfully", "tasks": tasks_created, "project_id": project_id}), 201
+
+
+@app.route('/project/<project_id>/tasks/<task_id>', methods=['PUT'])
+def update_task_route(project_id, task_id):
+    data = request.json
+    task = crud.update_task(task_id, tname=data.get(
+        'tname'), status=data.get('status'))
+    if task:
+        return jsonify(task.to_dict()), 200
+    return jsonify({"error": "Task not found"}), 404
+
+
+@app.route('/project/<project_id>/tasks/<task_id>', methods=['DELETE'])
+def delete_task_route(project_id, task_id):
+    task = crud.delete_task(task_id)
+    if task:
+        return jsonify({"message": "Task deleted"}), 200
+    return jsonify({"error": "Task not found"}), 404
 
 
 if __name__ == "__main__":

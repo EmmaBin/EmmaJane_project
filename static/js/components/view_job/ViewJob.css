@@ -1,0 +1,277 @@
+.current-tasks,
+.previous-tasks {
+    margin-bottom: 20px;
+}
+
+.summary-container {
+    font-size: 16px;
+    color: #B1B1B1;
+}
+
+.summary-container {
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    color: #59606F;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #B1B1B1;
+    position: relative;
+}
+
+/* .project-arrow::before {
+    content: '';
+    border: solid #535967;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 5px;
+    transform: rotate(45deg);
+    transition: transform 0.3s ease;
+} */
+
+.tasks-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    position: relative;
+    padding-top: 200px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header h2 {
+    margin: 0;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+}
+
+.header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #000000;
+}
+
+
+.icon-container {
+    margin-left: 8px;
+    display: flex;
+    align-items: center;
+    right: -40px
+}
+
+.custom-icon {
+    color: white;
+    background-color: #0974D4;
+    border-radius: 50%;
+    padding: 4px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav {
+    background-color: #D7D8D4;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.nav-button {
+    background-color: transparent;
+    color: #606778;
+    padding: 10px 20px;
+    margin: 0 10px;
+    cursor: pointer;
+    border: none;
+}
+
+.nav-button.active {
+    color: black;
+}
+
+.window-section {
+    width: 100%;
+    max-width: 800px;
+    min-width: 600px;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.window-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #B1B1B1;
+    margin-bottom: 20px;
+    width: 100%;
+    font-size: 18px;
+}
+
+.selected-shapes {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    flex-grow: 1;
+    overflow-y: auto;
+    max-height: calc(100vh - 220px);
+}
+
+.shape-item {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+}
+
+.shape-item img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+    position: relative;
+}
+
+.shape-details {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: space-between;
+}
+
+.shape-info {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+
+.shape-name {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.shape-input {
+    margin-right: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    flex-grow: 1;
+}
+
+.shape-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.cancel-btn,
+.delete-btn,
+.save-btn,
+.edit-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background-color: #ff4d4d;
+    color: #fff;
+}
+
+.delete-btn {
+    background-color: red;
+    color: #fff;
+}
+
+.save-btn {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.edit-btn {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.continue-container {
+    width: 100%;
+    max-width: 800px;
+    padding-bottom: 20px;
+    position: sticky;
+    bottom: 0;
+    padding-top: 20px;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+}
+
+.continue-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+
+.add-members {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.modal-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    border: 2px solid #000;
+    box-shadow: 24px;
+    padding: 16px;
+}
+
+.shape-container {
+    position: relative;
+    display: inline-block;
+    margin: 10px;
+}
+
+.selected-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(80, 38, 232, 0.5);
+}
+
+.edit-icon {
+    position: absolute;
+    bottom: -8px;
+    left: 20px;
+}
