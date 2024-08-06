@@ -3,10 +3,6 @@
     margin-bottom: 20px;
 }
 
-.summary-container {
-    font-size: 16px;
-    color: #B1B1B1;
-}
 
 .summary-container {
     font-size: 16px;
@@ -104,7 +100,8 @@
     color: black;
 }
 
-.window-section {
+.window-section,
+.teams-section {
     width: 100%;
     max-width: 800px;
     min-width: 600px;
@@ -150,7 +147,8 @@
     position: relative;
 }
 
-.shape-details {
+.shape-details,
+.member-details {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -274,4 +272,60 @@
     position: absolute;
     bottom: -8px;
     left: 20px;
+}
+
+.member-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+}
+
+.member-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.member-name {
+    font-weight: bold;
+}
+
+
+.member-team,
+.member-role {
+    color: #8c8c8c;
+}
+
+.remove-btn {
+    background-color: transparent;
+    color: red;
+    border: 1px solid red;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+/* Team section header */
+.team-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #B1B1B1;
+    padding: 10px 0;
+    font-size: 18px;
+    color: #59606F;
+    margin-bottom: 20px;
+}
+
+/* "Add members" link */
+.add-members-link {
+    color: #007bff;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.add-members-link:hover {
+    text-decoration: underline;
 }
