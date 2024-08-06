@@ -137,6 +137,35 @@ const ViewJob = () => {
         }
     };
 
+    const handleDeleteMember = async (memberId) => {
+        // Confirm before deletion
+        const confirmed = window.confirm('Are you sure you want to remove this member?');
+        if (!confirmed) return;
+
+        try {
+            console.log(`Deleting member ${memberId} from project ${projectId} on server`);
+            const response = await fetch(`/project/${projectId}/member/${memberId}`, {
+                method: "DELETE",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+            console.log('Server response data:', data);
+
+            if (!response.ok) {
+                console.error('Failed to delete member', response.status);
+            } else {
+                setMembers((prevMembers) => prevMembers.filter(member => member.id !== memberId));
+            }
+        } catch (error) {
+            console.error('Error deleting member:', error);
+        }
+    };
+
+
     return (
         <div className="tasks-container">
             <div className="nav">
@@ -150,7 +179,7 @@ const ViewJob = () => {
                     className={`nav-button ${activeTab === 'Teams' ? 'active' : ''}`}
                     onClick={() => setActiveTab('Teams')}
                 >
-                    Teams
+                    Team
                 </button>
             </div>
 
@@ -216,18 +245,19 @@ const ViewJob = () => {
                 </div>
             ) : (
                 <div className="teams-section">
-                    <h2>Teams Section</h2>
+                    <div className="team-header">
+                        <h2>Team</h2>
+                        <a className="add-members-link">Add members ▾</a>
+                    </div>
+
                     <ul>
                         {members.map((member) => (
-                            <li key={member.id}>
-                                <div className="member-info">
-                                    <div className="member-details">
-                                        <div className="member-name">{member.fname} {member.lname}</div>
-                                        <div className="member-email">{member.email}</div>
-                                        <div className="member-team">{member.team}</div>
-                                        <div className="member-role">{member.role}</div>
-                                    </div>
+                            <li key={member.id} className="member-info">
+                                <div className="member-details">
+                                    <div className="member-name">{member.fname} {member.lname}</div>
+                                    <div className="member-team">{member.role}</div>
                                 </div>
+                                <button className="remove-btn" onClick={() => handleDeleteMember(member.id)}>Remove</button>
                             </li>
                         ))}
                     </ul>

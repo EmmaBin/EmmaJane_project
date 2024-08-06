@@ -177,6 +177,19 @@ def members():
     return jsonify({member.user_id: member.to_dict() for member in members})
 
 
+@app.route('/project/<project_id>/member/<int:member_id>', methods=['DELETE'])
+def delete_project_member(project_id, member_id):
+    """Delete a member from a project"""
+    project_member = crud.get_project_member(project_id, member_id)
+    if not project_member:
+        return jsonify({"error": "Member not found in project"}), 404
+
+    db.session.delete(project_member)
+    db.session.commit()
+
+    return jsonify({"message": "Member removed from project"}), 200
+
+
 @app.route('/project', methods=['POST'])
 def add_project():
     """Create userproject instance"""
