@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 // import TaskPopUp from './TaskPopUp';
 import './ViewJob.css';
 import { AppContext } from '../../AppContext';
@@ -29,6 +29,7 @@ const ViewJob = () => {
     const [members, setMembers] = useState([]);
     const [windowNames, setWindowNames] = useState([]);
     const [windowsOpen, setWindowsOpen] = useState(true);
+    const navigate = useNavigate();
 
     const fetchProjectData = async () => {
         try {
@@ -165,6 +166,16 @@ const ViewJob = () => {
         }
     };
 
+    const handleEditPname = () => {
+        navigate(`/project/${projectId}/edit_pname`, {
+            state: {
+                projectId,
+                pname: projectInfo.pname,
+                address: projectInfo.address
+            }
+        });
+    };
+
 
     return (
         <div className="tasks-container">
@@ -188,7 +199,7 @@ const ViewJob = () => {
                     <div className="header">
                         <h2>{projectInfo && projectInfo.pname}</h2>
                         <div className="icon-container">
-                            <MdModeEdit className="custom-icon" size={14} />
+                            <MdModeEdit className="custom-icon" size={14} onClick={handleEditPname} />
                         </div>
                         <h3>{projectInfo && projectInfo.address}</h3>
                     </div>
