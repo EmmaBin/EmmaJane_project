@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
-// import TaskPopUp from './TaskPopUp';
+import TaskPopUp from '../tasks/TaskPopUp';
 import './ViewJob.css';
 import { AppContext } from '../../AppContext';
 import rectangle from '../../../images/rectangle.png';
@@ -178,103 +178,114 @@ const ViewJob = () => {
 
 
     return (
-        <div className="tasks-container">
-            <div className="nav">
-                <button
-                    className={`nav-button ${activeTab === 'Windows' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('Windows')}
-                >
-                    Windows
+        <div>
+            <div className="view-job-navbar">
+                <button className="back-btn" onClick={() => navigate(-1)}>
+                    Back
                 </button>
-                <button
-                    className={`nav-button ${activeTab === 'Teams' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('Teams')}
-                >
-                    Team
-                </button>
+                <TaskPopUp />
             </div>
-
-            {activeTab === 'Windows' ? (
-                <div className="window-section">
-                    <div className="header">
-                        <h2>{projectInfo && projectInfo.pname}</h2>
-                        <div className="icon-container">
-                            <MdModeEdit className="custom-icon" size={14} onClick={handleEditPname} />
-                        </div>
-                        <h3>{projectInfo && projectInfo.address}</h3>
-                    </div>
-
-                    <div className="tasks">
-                        <div className="current-tasks">
-
-                            <summary className="summary-container" onClick={toggleWindowsOpen}>
-                                <div className='summary-title'>Windows</div>
-                                <span>{windowsOpen ? 'Hide' : 'Open'}</span>
-                            </summary>
-
-                            <ul>
-                                {tasks.map((task, idx) => (
-                                    <li key={task.task_id} className="shape-item">
-                                        <div className="shape-container">
-                                            <img src={shapeImages[task.shape_name]} alt={`Selected Shape ${task.shape_name}`} />
-                                        </div>
-                                        <div className="shape-details">
-                                            <div className="shape-info">
-                                                <span className="shape-name">{task.shape_name}</span>
-                                                <input
-                                                    type="text"
-                                                    placeholder="Name window"
-                                                    className="shape-input"
-                                                    value={windowNames[idx]}
-                                                    onChange={(e) => handleNameChange(idx, e.target.value)}
-                                                    disabled={!editMode[idx]}
-                                                />
-                                            </div>
-                                            {windowsOpen && (
-                                                <div className="shape-actions">
-                                                    {editMode[idx] ? (
-                                                        <>
-                                                            <button className="save-btn" onClick={() => handleUpdate(idx)}>Save</button>
-                                                            <button className="delete-btn" onClick={() => handleDelete(idx)}>Delete</button>
-                                                            <button className="cancel-btn" onClick={() => toggleEditMode(idx)}>Cancel</button>
-                                                        </>
-                                                    ) : (
-                                                        <button className="edit-btn" onClick={() => toggleEditMode(idx)}>Edit</button>
-                                                    )}
-                                                </div>
-                                            )}
-                                        </div>
-
-                                    </li>
-                                ))}
-                            </ul>
-
-                        </div>
-                    </div>
-
-
+            <div className="tasks-container">
+                <div className="nav">
+                    <button
+                        className={`nav-button ${activeTab === 'Windows' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('Windows')}
+                    >
+                        Windows
+                    </button>
+                    <button
+                        className={`nav-button ${activeTab === 'Teams' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('Teams')}
+                    >
+                        Team
+                    </button>
                 </div>
-            ) : (
-                <div className="teams-section">
-                    <div className="team-header">
-                        <h2>Team</h2>
-                        <a className="add-members-link">Add members ▾</a>
-                    </div>
 
-                    <ul>
-                        {members.map((member) => (
-                            <li key={member.id} className="member-info">
-                                <div className="member-details">
-                                    <div className="member-name">{member.fname} {member.lname}</div>
-                                    <div className="member-team">{member.role}</div>
+                {activeTab === 'Windows' ? (
+                    <div className="window-section">
+                        <div className="header">
+                            <h2>{projectInfo && projectInfo.pname}
+                                <div className="icon-container">
+                                    <MdModeEdit className="custom-icon" size={14} onClick={handleEditPname} />
                                 </div>
-                                <button className="remove-btn" onClick={() => handleDeleteMember(member.id)}>Remove</button>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
+                            </h2>
+
+                            <h3>{projectInfo && projectInfo.address}</h3>
+                        </div>
+
+                        <div className="tasks">
+                            <div className="current-tasks">
+
+                                <summary className="summary-container" onClick={toggleWindowsOpen}>
+                                    <div className='summary-title'>Windows</div>
+                                    <span>{windowsOpen ? 'Hide' : 'Open'}</span>
+                                </summary>
+
+                                <ul>
+                                    {tasks.map((task, idx) => (
+                                        <li key={task.task_id} className="shape-item">
+                                            <div className="shape-container">
+                                                <img src={shapeImages[task.shape_name]} alt={`Selected Shape ${task.shape_name}`} />
+                                            </div>
+                                            <div className="shape-details">
+                                                <div className="shape-info">
+                                                    <span className="shape-name">{task.shape_name}</span>
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Name window"
+                                                        className="shape-input"
+                                                        value={windowNames[idx]}
+                                                        onChange={(e) => handleNameChange(idx, e.target.value)}
+                                                        disabled={!editMode[idx]}
+                                                    />
+                                                </div>
+                                                {windowsOpen && (
+                                                    <div className="shape-actions">
+                                                        {editMode[idx] ? (
+                                                            <>
+                                                                <button className="save-btn" onClick={() => handleUpdate(idx)}>Save</button>
+                                                                <button className="delete-btn" onClick={() => handleDelete(idx)}>Delete</button>
+                                                                <button className="cancel-btn" onClick={() => toggleEditMode(idx)}>Cancel</button>
+                                                            </>
+                                                        ) : (
+                                                            <button className="edit-btn" onClick={() => toggleEditMode(idx)}>Edit</button>
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                        </li>
+                                    ))}
+                                </ul>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                ) : (
+                    <div className="teams-section">
+                        <div className="team-header">
+                            <h2>Team</h2>
+                            <a className="add-members-link">Add members ▾</a>
+                        </div>
+
+                        <ul>
+                            {members.map((member) => (
+                                <li key={member.id} className="member-info">
+                                    <div className="member-details">
+                                        <div className="member-name">{member.fname} {member.lname}</div>
+                                        <div className="member-team">{member.role}</div>
+                                    </div>
+                                    <button className="remove-btn" onClick={() => handleDeleteMember(member.id)}>Remove</button>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+            </div>
         </div>
+
     );
 };
 

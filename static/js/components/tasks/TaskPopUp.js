@@ -13,6 +13,7 @@ import upperLowerBottom from '../../../images/upper_lower_bottom.png';
 
 export default function BasicModal() {
   const [shapes] = React.useState([rectangle, sidewayRectangle, square, upperLowerTop, upperLowerBottom]);
+  const [shapeNames] = React.useState(['Rectangle', 'Sideway Rectangle', 'Square', 'Upper Lower Top', 'Upper Lower Bottom']);
   const { selectedShapes, setSelectedShapes } = React.useContext(AppContext);
   const [open, setOpen] = React.useState(false);
   const [currentShape, setCurrentShape] = React.useState(null);
@@ -54,6 +55,7 @@ export default function BasicModal() {
                 onClick={() => addShape(index)}
               >
                 <img src={shape} alt={`Shape ${index}`} />
+                <div className="shape-name">{shapeNames[index]}</div>
                 {selectedShapes.includes(index) && (
                   <div className="selected-overlay"></div>
                 )}

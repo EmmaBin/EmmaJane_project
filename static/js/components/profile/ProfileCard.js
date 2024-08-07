@@ -82,7 +82,6 @@ const ProfileCard = () => {
             <div className="profile-image-container">
                 <img className="profile-image" src={profileImage || "https://via.placeholder.com/50"} alt="Profile" />
                 <div className="icon-container">
-                    {/* <MdModeEdit className="custom-icon" size={14} /> */}
                     <label htmlFor="file-input">
                         <MdModeEdit className="custom-icon" size={14} />
                     </label>

@@ -38,7 +38,7 @@ const NewProject = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         try {
             const response = await fetch("/project", {
                 method: "POST",
@@ -52,17 +52,18 @@ const NewProject = () => {
                     members: checkedMembers
                 }),
             });
-    
+
+
             if (response.ok) {
                 const data = await response.json(); // Await here to get JSON data
                 const projectId = data.project_id;
                 setCheckedMembers([]);
-                navigate(`/project/${projectId}`, { 
-                    state: { 
+                navigate(`/project/${projectId}`, {
+                    state: {
                         projectId,
                         pname: projectInfo.pname,
-                        address: projectInfo.address 
-                    } 
+                        address: projectInfo.address
+                    }
                 });
             } else {
                 console.error('Failed to add new project');
@@ -81,8 +82,16 @@ const NewProject = () => {
 
     return (
         <div>
-            <div className='newproject-div'>
-                <h2>Add new project</h2>
+
+            <div className="navbar">
+                <button className="back-btn" onClick={() => navigate(-1)}>
+                    Back
+                </button>
+            </div>
+            <div className="header">
+                <div className="header-content">
+                    <h2>Add new project</h2>
+                </div>
             </div>
 
             <form onSubmit={handleSubmit}>
@@ -96,8 +105,8 @@ const NewProject = () => {
                         required={true}
                         value={projectInfo.pname}
                         onChange={handleChange}
-                        placeholder="Your project name" 
-                        aria-label="Your project name" 
+                        placeholder="Your project name"
+                        aria-label="Your project name"
                     />
                 </div>
                 <div>
@@ -110,8 +119,8 @@ const NewProject = () => {
                         required={true}
                         value={projectInfo.address}
                         onChange={handleChange}
-                        placeholder="Project address" 
-                        aria-label="Project address" 
+                        placeholder="Project address"
+                        aria-label="Project address"
                     />
                 </div>
                 <div className="team">
@@ -138,10 +147,10 @@ const NewProject = () => {
                         </div>
                     ))
                 }
-                
-                <button 
-                    type="submit" 
-                    className={`continue-btn ${isFormValid ? 'active' : ''}`} 
+
+                <button
+                    type="submit"
+                    className={`continue-btn ${isFormValid ? 'active' : ''}`}
                     disabled={!isFormValid}
                 >
                     Continue

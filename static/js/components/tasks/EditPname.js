@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import './EditPname.css';
 
 export default function EditPname() {
     const location = useLocation();
+    const navigate = useNavigate();
     const { projectId, pname: initialPname, address: initialAddress } = location.state || {};
 
     const [pname, setPname] = useState(initialPname);
@@ -44,6 +45,11 @@ export default function EditPname() {
 
     return (
         <div className="edit-pname-container">
+            <div className="navbar">
+                <button className="back-btn" onClick={() => navigate(-1)}>
+                    Back
+                </button>
+            </div>
             <h1>Edit name</h1>
             <form onSubmit={handleSave}>
                 <div className="form-group">
