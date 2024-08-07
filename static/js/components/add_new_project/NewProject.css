@@ -6,6 +6,37 @@ body {
     margin: 0;
 }
 
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: 0px;
+
+
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #077EE8;
+    padding: 0px;
+    margin-bottom: 20px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .container {
     padding: 20px;
     height: 80vh;
@@ -50,7 +81,7 @@ input:focus {
 
 }
 
-.add-box{
+.add-box {
     justify-content: right;
 }
 
@@ -74,7 +105,7 @@ button.continue-btn {
 
 .checkbox {
     margin: 0;
-    width: auto; 
+    width: auto;
     vertical-align: middle;
 }
 
@@ -97,8 +128,8 @@ button.continue-btn.active {
     display: flex;
     align-items: center;
     font-size: 14px;
-  }
-  
+}
+
 .member-info .lname {
     margin-left: 5px;
 }
@@ -109,7 +140,7 @@ button.continue-btn.active {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 16px;
-    margin-bottom: 25px; 
+    margin-bottom: 25px;
     padding: 10px;
 }
 

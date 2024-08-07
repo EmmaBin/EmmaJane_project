@@ -21,10 +21,10 @@
     height: 100px;
 }
 
-.icon-container {
+.profile-card .profile-image-container .icon-container {
     position: absolute;
-    bottom: -1px;
-    right: -2px;
+    bottom: 4px;
+    right: 4px;
     background-color: #0974D4;
     border-radius: 50%;
     width: 26px;
@@ -33,6 +33,7 @@
     align-items: center;
     justify-content: center;
 }
+
 
 .custom-icon {
     color: white;
