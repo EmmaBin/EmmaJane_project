@@ -52,3 +52,35 @@
     padding: 10px 20px !important;
     cursor: pointer !important;
 }
+
+/* NUMBER INPUT SPINNER */
+
+.custom-spinner {
+    display: flex;
+    align-items: center;
+  }
+  
+  .decrement-button,
+  .increment-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 4px;
+  }
+  
+  .decrement-button:disabled,
+  .increment-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .quantity-display {
+    margin: 0 10px;
+    font-size: 18px;
+    min-width: 30px;
+    text-align: center;
+  }

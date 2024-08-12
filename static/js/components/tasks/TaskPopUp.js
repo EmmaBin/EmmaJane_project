@@ -15,9 +15,12 @@ export default function BasicModal() {
   const [shapes] = React.useState([rectangle, sidewayRectangle, square, upperLowerTop, upperLowerBottom]);
   const [shapeNames] = React.useState(['Rectangle', 'Sideway Rectangle', 'Square', 'Upper Lower Top', 'Upper Lower Bottom']);
   // const { selectedShapes, setSelectedShapes } = React.useContext(AppContext);
+    // const [currentShape, setCurrentShape] = React.useState(null);
+  const { selectedShapes, setSelectedShapes, shapeQuantities, setShapeQuantities } = React.useContext(AppContext);
   const [selectedShape, setSelectedShape] = React.useState(null);
+  const [quantity, setQuantity] = React.useState(1);
   const [open, setOpen] = React.useState(false);
-  const [currentShape, setCurrentShape] = React.useState(null);
+
 
   const handleOpen = () => {
     setOpen(true);
@@ -31,12 +34,37 @@ export default function BasicModal() {
   // };
   const selectShape = (index) => {
     setSelectedShape(index);
+    setQuantity(1);
   };
 
   // const removeCurrentShape = () => {
   //   setSelectedShapes((prevSelectedShapes) => prevSelectedShapes.filter((shapeIndex) => shapeIndex !== currentShape));
   //   setCurrentShape(null);
   // };
+
+  const handleIncrement = () => {
+    setQuantity(prevQuantity => Math.min(prevQuantity + 1, 20));
+  };
+
+  const handleDecrement = () => {
+    setQuantity(prevQuantity => Math.max(prevQuantity - 1, 1));
+  };
+
+  const handleAddShape = () => {
+    if (selectedShape !== null) {
+        // Update quantities in context
+        setShapeQuantities(prevQuantities => ({
+            ...prevQuantities,
+            [selectedShape]: quantity
+        }));
+        
+        setSelectedShapes(prevSelectedShapes => [
+            ...prevSelectedShapes,
+            ...Array(quantity).fill(selectedShape)  
+        ]);
+        handleClose();
+    }
+  };
 
   return (
     <div>
@@ -72,6 +100,18 @@ export default function BasicModal() {
           >
             Delete
           </Button> */}
+
+          {selectedShape !== null && (
+            <div className="quantity-container">
+              <label htmlFor="quantity-input">Quantity:</label>
+              <div className="custom-spinner">
+                <button onClick={handleDecrement} className="decrement-button">-</button>
+                <span className="quantity-display">{quantity}</span>
+                <button onClick={handleIncrement} className="increment-button">+</button>
+              </div>
+              <Button onClick={handleAddShape}>Add</Button>
+            </div>
+          )}
         </Box>
       </Modal>
     </div>
