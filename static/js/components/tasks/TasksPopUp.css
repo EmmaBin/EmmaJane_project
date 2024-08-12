@@ -34,13 +34,24 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    max-width: 100px;
+    max-height: 100px;
 }
-
 .shape-container img {
     background-color: #AF9F9F;
     display: block;
     max-width: 100px;
     max-height: 100px;
+}
+
+.shape-name {
+    font-size: 12px;
+    margin-top: 10px; 
+    text-align: center; 
+    word-wrap: break-word;
+    overflow-wrap: break-word; 
+    white-space: normal; 
+    max-width: 100px; 
 }
 
 .selected-overlay {
