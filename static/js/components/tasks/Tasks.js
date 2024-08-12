@@ -184,40 +184,6 @@ const Tasks = () => {
                     <label>Windows</label>
                     <TaskPopUp />
                 </div>
-                {/* <div className="selected-shapes">
-                    {selectedShapes.map((shapeIndex, idx) => (
-                        <div key={idx} className="shape-item">
-                            <div className="shape-container">
-                                <img src={shapes[shapeIndex]} alt={`Selected Shape ${shapeIndex}`} />
-                                <MdModeEdit className="edit-icon custom-icon" size={14} />
-                            </div>
-                            <div className="shape-details">
-                                <div className="shape-info">
-                                    <span className="shape-name">{shapeNames[shapeIndex]}</span>
-                                    <input
-                                        type="text"
-                                        placeholder="Name window"
-                                        className="shape-input"
-                                        value={windowNames[idx]}
-                                        onChange={(e) => handleNameChange(idx, e.target.value)}
-                                        disabled={!editMode[idx]}
-                                    />
-                                </div>
-                                <div className="shape-actions">
-                                    {editMode[idx] ? (
-                                        <>
-                                            <button className="cancel-btn" onClick={() => toggleEditMode(idx)}>Cancel</button>
-                                            <button className="save-btn" onClick={() => toggleEditMode(idx)}>Save</button>
-                                            <button className="delete-btn" onClick={() => toggleEditMode(idx, true)}>Delete</button>
-                                        </>
-                                    ) : (
-                                        <button className="edit-btn" onClick={() => toggleEditMode(idx)}>Edit</button>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div> */}
                 <div className="selected-shapes">
                     {selectedShapes.map((shapeIndex, idx) => (
                         <div key={idx} className="shape-item">

@@ -86,11 +86,13 @@ export default function BasicModal() {
                 className={`shape-container ${selectedShape === index ? 'selected' : ''}`}
                 onClick={() => selectShape(index)}
               >
-                <img src={shape} alt={`Shape ${index}`} />
+                <div className="image-container">
+                  <img src={shape} alt={`Shape ${index}`} />
+                  {selectedShape === index && (
+                    <div className="selected-overlay"></div>
+                  )}
+                </div>
                 <div className="shape-name">{shapeNames[index]}</div>
-                {selectedShape === index && (
-                  <div className="selected-overlay"></div>
-                )}
               </div>
             ))}
           </div>
