@@ -17,7 +17,7 @@ const Tasks = () => {
     const { projectId } = useParams();
     const location = useLocation();
     const { pname, address } = location.state || {};
-    const { selectedShapes, shapeQuantities, setSelectedShapes } = useContext(AppContext);
+    const { selectedShapes, shapeQuantities, setSelectedShapes, setShapeQuantities } = useContext(AppContext);
     const [editMode, setEditMode] = useState(selectedShapes.map(() => false));
     const [isContinueActive, setIsContinueActive] = useState(false);
     // const [activeTab, setActiveTab] = useState('Windows');
@@ -61,7 +61,13 @@ const Tasks = () => {
         };
 
         fetchProjectData();
-    }, [projectId]);
+
+        return () => {
+            // Reset selectedShapes and shapeQuantities when navigating away
+            setSelectedShapes([]);
+            setShapeQuantities({});
+        };
+    }, [projectId, setSelectedShapes, setShapeQuantities]);
 
     const handleEditPname = () => {
         navigate(`/project/${projectId}/edit_pname`, {
