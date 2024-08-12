@@ -14,7 +14,8 @@ import upperLowerBottom from '../../../images/upper_lower_bottom.png';
 export default function BasicModal() {
   const [shapes] = React.useState([rectangle, sidewayRectangle, square, upperLowerTop, upperLowerBottom]);
   const [shapeNames] = React.useState(['Rectangle', 'Sideway Rectangle', 'Square', 'Upper Lower Top', 'Upper Lower Bottom']);
-  const { selectedShapes, setSelectedShapes } = React.useContext(AppContext);
+  // const { selectedShapes, setSelectedShapes } = React.useContext(AppContext);
+  const [selectedShape, setSelectedShape] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const [currentShape, setCurrentShape] = React.useState(null);
 
@@ -24,15 +25,18 @@ export default function BasicModal() {
 
   const handleClose = () => setOpen(false);
 
-  const addShape = (index) => {
-    setSelectedShapes((prevSelectedShapes) => [...prevSelectedShapes, index]);
-    setCurrentShape(index);
+  // const addShape = (index) => {
+  //   setSelectedShapes((prevSelectedShapes) => [...prevSelectedShapes, index]);
+  //   setCurrentShape(index);
+  // };
+  const selectShape = (index) => {
+    setSelectedShape(index);
   };
 
-  const removeCurrentShape = () => {
-    setSelectedShapes((prevSelectedShapes) => prevSelectedShapes.filter((shapeIndex) => shapeIndex !== currentShape));
-    setCurrentShape(null);
-  };
+  // const removeCurrentShape = () => {
+  //   setSelectedShapes((prevSelectedShapes) => prevSelectedShapes.filter((shapeIndex) => shapeIndex !== currentShape));
+  //   setCurrentShape(null);
+  // };
 
   return (
     <div>
@@ -51,23 +55,23 @@ export default function BasicModal() {
             {shapes.map((shape, index) => (
               <div
                 key={index}
-                className={`shape-container ${selectedShapes.includes(index) ? 'selected' : ''}`}
-                onClick={() => addShape(index)}
+                className={`shape-container ${selectedShape === index ? 'selected' : ''}`}
+                onClick={() => selectShape(index)}
               >
                 <img src={shape} alt={`Shape ${index}`} />
                 <div className="shape-name">{shapeNames[index]}</div>
-                {selectedShapes.includes(index) && (
+                {selectedShape === index && (
                   <div className="selected-overlay"></div>
                 )}
               </div>
             ))}
           </div>
-          <Button
+          {/* <Button
             className="delete-button"
             onClick={removeCurrentShape}
           >
             Delete
-          </Button>
+          </Button> */}
         </Box>
       </Modal>
     </div>
