@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import TaskPopUp from '../tasks/TaskPopUp';
+import ViewJobPopUp from './ViewJobPopUp';
 import './ViewJob.css';
 import { AppContext } from '../../AppContext';
 import rectangle from '../../../images/rectangle.png';
@@ -29,6 +30,8 @@ const ViewJob = () => {
     const [members, setMembers] = useState([]);
     const [windowNames, setWindowNames] = useState([]);
     const [windowsOpen, setWindowsOpen] = useState(true);
+    const [showPopUp, setShowPopUp] = useState(false); // For controlling the modal visibility
+    const [selectedTask, setSelectedTask] = useState(null);
     const navigate = useNavigate();
 
     const fetchProjectData = async () => {
@@ -176,6 +179,18 @@ const ViewJob = () => {
         });
     };
 
+    const handleImageClick = (task) => {
+        if (!windowsOpen) {
+            setSelectedTask(task); // Store the selected task
+            setShowPopUp(true); // Open the modal
+        }
+    };
+
+    const handleClosePopUp = () => {
+        setShowPopUp(false); // Close the modal
+        setSelectedTask(null); // Clear the selected task
+    };
+
 
     return (
         <div>
@@ -224,7 +239,11 @@ const ViewJob = () => {
                                 <ul>
                                     {tasks.map((task, idx) => (
                                         <li key={task.task_id} className="shape-item">
-                                            <div className="shape-container">
+                                            <div 
+                                                className="shape-container"
+                                                onClick={() => handleImageClick(task)}
+                                                style={{ cursor: !windowsOpen ? 'pointer' : 'default' }}
+                                            >
                                                 <img src={shapeImages[task.shape_name]} alt={`Selected Shape ${task.shape_name}`} />
                                             </div>
                                             <div className="shape-details">
@@ -284,6 +303,13 @@ const ViewJob = () => {
                     </div>
                 )}
             </div>
+            {showPopUp && (
+                <ViewJobPopUp 
+                task={selectedTask} 
+                members={members} 
+                onClose={handleClosePopUp} 
+                />
+            )}
         </div>
 
     );
