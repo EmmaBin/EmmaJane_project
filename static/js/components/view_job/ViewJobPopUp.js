@@ -24,6 +24,32 @@ const style = {
 };
 
 const ViewJobPopUp = ({ task, members = [], onClose }) => {
+    const [checkedMember, setCheckedMember] = useState([]);
+    const [isFormValid, setIsFormValid] = useState(false);
+
+    const handleCheckboxChange = (member) => {
+        setCheckedMember((prevCheckedMember) => {
+        const isChecked = prevCheckedMember.some((m) => m.user_id === member.user_id);
+        if (isChecked) {
+            return prevCheckedMember.filter((m) => m.user_id !== member.user_id);
+        } else {
+            return [...prevCheckedMember, member];
+        }
+        });
+    };
+
+    const isChecked = (userId) => {
+        return checkedMember.some((m) => m.id === userId);
+    };
+
+    const validate = () => {
+        return checkedMember.length > 0; // Ensure at least one member is checked
+    };
+
+    useEffect(() => {
+        setIsFormValid(validate());
+    }, [checkedMember]);
+
     return (
         <Modal
             open={true}
@@ -32,9 +58,18 @@ const ViewJobPopUp = ({ task, members = [], onClose }) => {
             aria-describedby="modal-modal-description"
         >
             <Box sx={style}>
-                <Typography className="invite-header" id="modal-modal-title">
-                    Assign Job
-                </Typography>
+                <div className="assign-container">
+                    <Button onClick={onClose}>Close</Button>
+                    <Typography className="invite-header" id="modal-modal-title">
+                        Assign Job
+                    </Typography>
+                    <Button 
+                        className={`assign-btn ${isFormValid ? 'active' : ''}`}
+                        disabled={!isFormValid}
+                    >
+                        Confirm
+                    </Button>
+                </div>
                 <Box alignItems="center" sx={{ mt: 2, mb: 8 }}>
                     {members.map((member) => (
                         <Box 
@@ -46,10 +81,15 @@ const ViewJobPopUp = ({ task, members = [], onClose }) => {
                                 <Typography className="lname">{member.lname}</Typography>
                             </div>
                             <Typography className="member-role">{member.role}</Typography>
+                            <input 
+                                className="checkbox"
+                                type="checkbox" 
+                                checked={isChecked(member.id)} 
+                                onChange={() => handleCheckboxChange(member)} 
+                            />
                         </Box>
                     ))}
                 </Box>
-                <Button onClick={onClose}>Close</Button>
             </Box>
         </Modal>
     );
