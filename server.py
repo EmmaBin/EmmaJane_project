@@ -4,12 +4,14 @@ from flask import (Flask, render_template, request, flash, session,
 
 from model import connect_to_db, db
 import crud
-from datetime import datetime
 import os
 from dotenv import load_dotenv
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+from datetime import datetime, timedelta, timezone
+from authlib.jose import jwt
+from flask_mail import Mail, Message
 
 load_dotenv()
 
@@ -22,6 +24,15 @@ cloudinary.config(
 app = Flask(__name__)
 app.secret_key = os.getenv("EmmaJane5678")
 app.config['DEBUG'] = True
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = os.getenv('GMAIL_USER')
+app.config['MAIL_PASSWORD'] = os.getenv('GMAIL_PASS')
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv('GMAIL_USER')
+
+mail = Mail(app)
 
 
 @app.route("/")
@@ -93,8 +104,26 @@ def register():
         })
 
 
-def send_mail():
-    pass
+def send_mail(user):
+    """Send password reset email."""
+    # Generate a token
+    payload = {
+        'user_id': user.user_id,
+        'email': user.email,
+        'exp': datetime.now(timezone.utc) + timedelta(hours=1)
+    }
+    token = jwt.encode({'alg': 'HS256'}, payload, os.getenv('JWT_SECRET_KEY'))
+
+    # Create the reset URL
+    reset_url = f"http://localhost:5000/reset_password/{token}"
+
+    # Prepare email
+    msg = Message("Password Reset Request",
+                  recipients=[user.email])
+    msg.body = f"To reset your password, click the link: {reset_url}"
+
+    # Send the email
+    mail.send(msg)
 
 
 @app.route("/reset_password", methods=['POST'])
@@ -105,7 +134,7 @@ def reset_request():
     if not user:
         return jsonify({'error': 'No account found with that email address.'}), 404
 
-    send_mail()
+    send_mail(user)
     print(f"User found: {user.to_dict()}")
     return jsonify({'message': 'A password reset link has been sent to your email address.'}), 200
 
