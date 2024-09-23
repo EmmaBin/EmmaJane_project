@@ -16,6 +16,8 @@ import EditPname from './components/tasks/EditPname';
 import { AppProvider } from './AppContext';
 import ResetPassword from './components/reset_password/Reset';
 import SendLink from './components/reset_password/SendLink';
+import NewPassword from './components/reset_password/Newpassword';
+
 const root = createRoot(document.getElementById('main'));
 
 function App() {
@@ -31,6 +33,7 @@ function App() {
                 <Route path="/project/:projectId/edit_pname" element={<EditPname />} />
                 <Route path="/reset_password" element={<ResetPassword />} />
                 <Route path="/send_link" element={<SendLink />} />
+                <Route path="/reset_password/:token" element={<NewPassword />} />
 
             </Routes>
         </Router>

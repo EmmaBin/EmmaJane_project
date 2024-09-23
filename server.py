@@ -112,15 +112,17 @@ def send_mail(user):
         'email': user.email,
         'exp': datetime.now(timezone.utc) + timedelta(hours=1)
     }
-    token = jwt.encode({'alg': 'HS256'}, payload, os.getenv('JWT_SECRET_KEY'))
+    token = jwt.encode({'alg': 'HS256'}, payload,
+                       os.getenv('JWT_SECRET_KEY')).decode('utf-8')
 
     # Create the reset URL
-    reset_url = f"http://localhost:5000/reset_password/{token}"
+    reset_link = f"http://127.0.0.1:5000/reset_password/{token}"
+    print(f"**************Reset link: {reset_link}")
 
     # Prepare email
     msg = Message("Password Reset Request",
                   recipients=[user.email])
-    msg.body = f"To reset your password, click the link: {reset_url}"
+    msg.body = f"To reset your password, click the link: {reset_link}. Link will expire in 1 hour."
 
     # Send the email
     mail.send(msg)
@@ -137,6 +139,59 @@ def reset_request():
     send_mail(user)
     print(f"User found: {user.to_dict()}")
     return jsonify({'message': 'A password reset link has been sent to your email address.'}), 200
+
+
+@app.route("/verify_token/<token>", methods=['GET'])
+def verify_token(token):
+    try:
+        # Decode the token
+        payload = jwt.decode(token, os.getenv(
+            'JWT_SECRET_KEY'), algorithms=['HS256'])
+        user_id = payload['user_id']
+        user = crud.get_user_by_id(user_id)  # Fetch user from the database
+
+        if user:
+            return jsonify({'valid': True, 'user_id': user_id})
+        else:
+            return jsonify({'valid': False, 'error': 'User not found.'}), 404
+
+    except jwt.ExpiredSignatureError:
+        return jsonify({'valid': False, 'error': 'Token has expired.'}), 400
+    except jwt.InvalidTokenError:
+        return jsonify({'valid': False, 'error': 'Invalid token.'}), 400
+
+
+@app.route("/reset_password/<token>", methods=['POST'])
+def reset_password(token):
+    """Reset the password using token"""
+    try:
+        # Decode the token to get the user ID
+        payload = jwt.decode(token, os.getenv(
+            'JWT_SECRET_KEY'), algorithms=['HS256'])
+        user_id = payload['user_id']
+        user = crud.get_user_by_id(user_id)
+
+        if not user:
+            return jsonify({'error': 'User not found.'}), 404
+
+        # Get the new password from request
+        new_password = request.json.get('password')
+
+        if not new_password:
+            return jsonify({'error': 'Password cannot be empty.'}), 400
+
+        # Update user's password in the database
+        user.set_password(new_password)
+        return jsonify({'success': True, 'message': 'Password has been updated successfully.'}), 200
+
+    except jwt.ExpiredSignatureError:
+        return jsonify({'error': 'Token has expired.'}), 400
+
+    except jwt.DecodeError:
+        return jsonify({'error': 'Invalid token.'}), 400
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 # Upload profile photos
