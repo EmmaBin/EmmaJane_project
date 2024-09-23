@@ -14,7 +14,8 @@ import Tasks from './components/tasks/Tasks'
 import ViewJob from './components/view_job/ViewJob'
 import EditPname from './components/tasks/EditPname';
 import { AppProvider } from './AppContext';
-
+import ResetPassword from './components/reset_password/Reset';
+import SendLink from './components/reset_password/SendLink';
 const root = createRoot(document.getElementById('main'));
 
 function App() {
@@ -28,6 +29,8 @@ function App() {
                 <Route path="/project/:projectId" element={<Tasks />} />
                 <Route path="/project/:projectId/view_job" element={<ViewJob />} />
                 <Route path="/project/:projectId/edit_pname" element={<EditPname />} />
+                <Route path="/reset_password" element={<ResetPassword />} />
+                <Route path="/send_link" element={<SendLink />} />
 
             </Routes>
         </Router>

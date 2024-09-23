@@ -93,6 +93,23 @@ def register():
         })
 
 
+def send_mail():
+    pass
+
+
+@app.route("/reset_password", methods=['POST'])
+def reset_request():
+    """Reset Password"""
+    email = request.json.get('email')
+    user = crud.get_user_by_email(email)
+    if not user:
+        return jsonify({'error': 'No account found with that email address.'}), 404
+
+    send_mail()
+    print(f"User found: {user.to_dict()}")
+    return jsonify({'message': 'A password reset link has been sent to your email address.'}), 200
+
+
 # Upload profile photos
 @app.route('/upload-image', methods=['POST'])
 def upload_image():
