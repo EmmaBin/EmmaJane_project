@@ -10,7 +10,7 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 from datetime import datetime, timedelta, timezone
-from authlib.jose import jwt
+from authlib.jose import jwt, JoseError
 from flask_mail import Mail, Message
 
 load_dotenv()
@@ -144,11 +144,11 @@ def reset_request():
 @app.route("/verify_token/<token>", methods=['GET'])
 def verify_token(token):
     try:
-        # Decode the token
+
         payload = jwt.decode(token, os.getenv(
             'JWT_SECRET_KEY'), algorithms=['HS256'])
         user_id = payload['user_id']
-        user = crud.get_user_by_id(user_id)  # Fetch user from the database
+        user = crud.get_user_by_id(user_id)
 
         if user:
             return jsonify({'valid': True, 'user_id': user_id})
@@ -161,34 +161,32 @@ def verify_token(token):
         return jsonify({'valid': False, 'error': 'Invalid token.'}), 400
 
 
-@app.route("/reset_password/<token>", methods=['POST'])
+@app.route("/reset_password/<token>", methods=['GET', 'POST'])
 def reset_password(token):
-    """Reset the password using token"""
+    """Render the reset password page and handle password reset."""
     try:
-        # Decode the token to get the user ID
-        payload = jwt.decode(token, os.getenv(
-            'JWT_SECRET_KEY'), algorithms=['HS256'])
+
+        payload = jwt.decode(token, os.getenv('JWT_SECRET_KEY'))
         user_id = payload['user_id']
         user = crud.get_user_by_id(user_id)
 
         if not user:
             return jsonify({'error': 'User not found.'}), 404
 
-        # Get the new password from request
-        new_password = request.json.get('password')
+        if request.method == 'POST':
+            new_password = request.json.get('password')
 
-        if not new_password:
-            return jsonify({'error': 'Password cannot be empty.'}), 400
+            if not new_password:
+                return jsonify({'error': 'Password cannot be empty.'}), 400
 
-        # Update user's password in the database
-        user.set_password(new_password)
-        return jsonify({'success': True, 'message': 'Password has been updated successfully.'}), 200
+            user.set_password(new_password)
+            return jsonify({'success': True, 'message': 'Password has been updated successfully.'}), 200
 
-    except jwt.ExpiredSignatureError:
-        return jsonify({'error': 'Token has expired.'}), 400
+        return redirect("/reset_password_complete")
 
-    except jwt.DecodeError:
-        return jsonify({'error': 'Invalid token.'}), 400
+    except JoseError as e:
+
+        return jsonify({'error': 'Token error: {}'.format(str(e))}), 400
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
