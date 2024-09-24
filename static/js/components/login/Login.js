@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppContext } from '../../AppContext';
 import './Login.css';
 import { PiEye, PiEyeClosed } from "react-icons/pi";
+import { Link } from 'react-router-dom';
 
 export default function Login() {
     const [logInfo, setLogInfo] = useState({
@@ -130,7 +131,7 @@ export default function Login() {
 
                     {errors.password && touched.password && <div className="error-message">{errors.password}</div>}
                     <div className="forgot-password-container">
-                        <a href="#" className="forgot-password">Forgot password?</a>
+                        <Link to="/reset_password" className="forgot-password">Forgot password?</Link>
                     </div>
                 </div>
                 <button type="submit" className={`login-btn ${isFormValid ? 'active' : ''}`}>Log in</button>
