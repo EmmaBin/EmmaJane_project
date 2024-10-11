@@ -326,6 +326,28 @@ def delete_task_route(project_id, task_id):
     return jsonify({"error": "Task not found"}), 404
 
 
+
+# Assign Team Member to Job
+
+@app.route('/assign_job', methods=['POST'])
+def assign_member_to_job():
+    """Assign a team member to a job"""
+
+    # Get the job_id and the list of member IDs from the request body
+    task_id = request.json.get('task_id')
+    user_id = request.json.get('member_id')
+
+    if not task_id or not user_id:
+        return jsonify({"error": "Job ID and member ID are required"}), 400
+
+    try:
+        crud.assign_member_to_task(user_id, task_id)  # Make sure this function handles errors
+        return jsonify({"success": True, "message": "Member assigned to job successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500  # Return error details in case of exception
+
+
+
 if __name__ == "__main__":
     connect_to_db(app)
     app.run()

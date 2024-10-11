@@ -101,6 +101,23 @@ def get_tasks_by_project_id(project_id):
     # return {task.task_id: task.to_dict() for task in tasks}
     return [task.to_dict() for task in tasks]
 
+def assign_member_to_task(user_id, task_id):
+    """Assign a member (user) to a task."""
+    
+    # Check if the user is already assigned to the task
+    existing_assignment = UserTask.query.filter_by(user_id=user_id, task_id=task_id).first()
+    
+    if existing_assignment:
+        return {'error': 'User is already assigned to this task'}
+    
+    # Create a new assignment
+    user_task = UserTask(user_id=user_id, task_id=task_id)
+    
+    db.session.add(user_task)
+    db.session.commit()
+    
+    return user_task
+
 # Task-related
 
 

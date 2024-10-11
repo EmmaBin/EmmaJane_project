@@ -181,16 +181,20 @@ const ViewJob = () => {
 
     const handleImageClick = (task) => {
         if (!windowsOpen) {
-            setSelectedTask(task); // Store the selected task
-            setShowPopUp(true); // Open the modal
+            console.log('Task selected:', task);
+            setSelectedTask(task);
+            setShowPopUp(true);
         }
     };
+    
+    
 
     const handleClosePopUp = () => {
+        console.log('Closing ViewJobPopUp');
         setShowPopUp(false); // Close the modal
         setSelectedTask(null); // Clear the selected task
     };
-
+    
 
     return (
         <div>
@@ -304,11 +308,13 @@ const ViewJob = () => {
                 )}
             </div>
             {showPopUp && (
-                <ViewJobPopUp 
-                task={selectedTask} 
-                members={members} 
-                onClose={handleClosePopUp} 
-                />
+                <>
+                    <ViewJobPopUp 
+                        task={selectedTask} 
+                        members={members} 
+                        onClose={handleClosePopUp} 
+                    />
+                </>
             )}
         </div>
 

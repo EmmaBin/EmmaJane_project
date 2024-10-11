@@ -24,6 +24,7 @@ const style = {
 };
 
 const ViewJobPopUp = ({ task, members = [], onClose }) => {
+    
     const [checkedMember, setCheckedMember] = useState([]);
     const [isFormValid, setIsFormValid] = useState(false);
 
@@ -48,7 +49,60 @@ const ViewJobPopUp = ({ task, members = [], onClose }) => {
 
     useEffect(() => {
         setIsFormValid(validate());
+        console.log('Is form valid:', isFormValid); // Log to see if it's being set correctly
     }, [checkedMember]);
+
+    const handleAssign = async () => {
+        console.log('Task ID:', task.task_id);
+        console.log('Member ID:', checkedMember ? checkedMember[0].id : 'No member selected');
+        try {
+            // Sending a POST request to assign a member to a job
+            const response = await fetch('/assign_job', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    task_id: task.task_id,
+                    member_id: checkedMember[0].id // Only one selected member
+                })
+            });
+    
+            // Log the response status
+            console.log('Response Status:', response.status);
+    
+            // Check if the response is successful (status code 200-299)
+            if (response.ok) {
+                const result = await response.json(); // Parse the response JSON
+    
+                // Log the response result for debugging
+                console.log('Response Result:', result);
+    
+                // Check if the success property is true in the result
+                if (result.success) {
+                    console.log('Member assigned successfully!'); // Log success
+                    alert('Member assigned successfully!'); // Notify user
+                    setCheckedMember(null); // Clear selected member
+                    onClose(); // Close the modal
+                } else {
+                    // Log and alert the specific error message from the server
+                    console.error('Assignment error:', result.message);
+                    alert(`Error: ${result.message}`);
+                }
+            } else {
+                // If the response is not OK, attempt to read the JSON response for error messages
+                const errorResult = await response.json(); // Parse the response JSON
+                console.error('Failed to assign member. Status:', response.status, errorResult);
+                alert(`Failed to assign member: ${errorResult.error || 'Unknown error occurred.'}`);
+            }
+        } catch (error) {
+            // Log any errors that occurred during the fetch
+            console.error('Error assigning member:', error);
+            alert('An error occurred while assigning the member. Please try again.');
+        }
+    };
+    
+    
 
     return (
         <Modal
@@ -66,6 +120,10 @@ const ViewJobPopUp = ({ task, members = [], onClose }) => {
                     <Button 
                         className={`assign-btn ${isFormValid ? 'active' : ''}`}
                         disabled={!isFormValid}
+                        onClick={() => {
+                            console.log('Confirm button clicked'); // Debug log
+                            handleAssign();
+                        }}
                     >
                         Confirm
                     </Button>
