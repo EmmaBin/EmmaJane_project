@@ -113,7 +113,7 @@ const ViewJobPopUp = ({ task, members = [], onClose }) => {
         >
             <Box sx={style}>
                 <div className="assign-container">
-                    <Button onClick={onClose}>Close</Button>
+                    <Button onClick={onClose}>Cancel</Button>
                     <Typography className="invite-header" id="modal-modal-title">
                         Assign Job
                     </Typography>

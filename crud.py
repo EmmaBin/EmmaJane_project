@@ -105,10 +105,10 @@ def assign_member_to_task(user_id, task_id):
     """Assign a member (user) to a task."""
     
     # Check if the user is already assigned to the task
-    existing_assignment = UserTask.query.filter_by(user_id=user_id, task_id=task_id).first()
+    # existing_assignment = UserTask.query.filter_by(user_id=user_id, task_id=task_id).first()
     
-    if existing_assignment:
-        return {'error': 'User is already assigned to this task'}
+    # if existing_assignment:
+    #     return {'error': 'User is already assigned to this task'}
     
     # Create a new assignment
     user_task = UserTask(user_id=user_id, task_id=task_id)

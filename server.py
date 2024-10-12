@@ -4,12 +4,14 @@ from flask import (Flask, render_template, request, flash, session,
 
 from model import connect_to_db, db
 import crud
-from datetime import datetime
 import os
 from dotenv import load_dotenv
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+from datetime import datetime, timedelta, timezone
+from authlib.jose import jwt, JoseError
+from flask_mail import Mail, Message
 
 load_dotenv()
 
@@ -22,6 +24,15 @@ cloudinary.config(
 app = Flask(__name__)
 app.secret_key = os.getenv("EmmaJane5678")
 app.config['DEBUG'] = True
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = os.getenv('GMAIL_USER')
+app.config['MAIL_PASSWORD'] = os.getenv('GMAIL_PASS')
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv('GMAIL_USER')
+
+mail = Mail(app)
 
 
 @app.route("/")
@@ -91,6 +102,94 @@ def register():
             "email": user.email,
             "team": user.team
         })
+
+
+def send_mail(user):
+    """Send password reset email."""
+    # Generate a token
+    payload = {
+        'user_id': user.user_id,
+        'email': user.email,
+        'exp': datetime.now(timezone.utc) + timedelta(hours=1)
+    }
+    token = jwt.encode({'alg': 'HS256'}, payload,
+                       os.getenv('JWT_SECRET_KEY')).decode('utf-8')
+
+    # Create the reset URL
+    reset_link = f"http://127.0.0.1:5000/reset_password/{token}"
+    print(f"**************Reset link: {reset_link}")
+
+    # Prepare email
+    msg = Message("Password Reset Request",
+                  recipients=[user.email])
+    msg.body = f"To reset your password, click the link: {reset_link}. Link will expire in 1 hour."
+
+    # Send the email
+    mail.send(msg)
+
+
+@app.route("/reset_password", methods=['POST'])
+def reset_request():
+    """Reset Password"""
+    email = request.json.get('email')
+    user = crud.get_user_by_email(email)
+    if not user:
+        return jsonify({'error': 'No account found with that email address.'}), 404
+
+    send_mail(user)
+    print(f"User found: {user.to_dict()}")
+    return jsonify({'message': 'A password reset link has been sent to your email address.'}), 200
+
+
+@app.route("/verify_token/<token>", methods=['GET'])
+def verify_token(token):
+    try:
+
+        payload = jwt.decode(token, os.getenv(
+            'JWT_SECRET_KEY'), algorithms=['HS256'])
+        user_id = payload['user_id']
+        user = crud.get_user_by_id(user_id)
+
+        if user:
+            return jsonify({'valid': True, 'user_id': user_id})
+        else:
+            return jsonify({'valid': False, 'error': 'User not found.'}), 404
+
+    except jwt.ExpiredSignatureError:
+        return jsonify({'valid': False, 'error': 'Token has expired.'}), 400
+    except jwt.InvalidTokenError:
+        return jsonify({'valid': False, 'error': 'Invalid token.'}), 400
+
+
+@app.route("/reset_password/<token>", methods=['GET', 'POST'])
+def reset_password(token):
+    """Render the reset password page and handle password reset."""
+    try:
+
+        payload = jwt.decode(token, os.getenv('JWT_SECRET_KEY'))
+        user_id = payload['user_id']
+        user = crud.get_user_by_id(user_id)
+
+        if not user:
+            return jsonify({'error': 'User not found.'}), 404
+
+        if request.method == 'POST':
+            new_password = request.json.get('password')
+
+            if not new_password:
+                return jsonify({'error': 'Password cannot be empty.'}), 400
+
+            user.set_password(new_password)
+            return jsonify({'success': True, 'message': 'Password has been updated successfully.'}), 200
+
+        return redirect("/reset_password_complete")
+
+    except JoseError as e:
+
+        return jsonify({'error': 'Token error: {}'.format(str(e))}), 400
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 # Upload profile photos
