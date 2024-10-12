@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
-import TaskPopUp from '../tasks/TaskPopUp';
+// import TaskPopUp from '../tasks/TaskPopUp';
+import ViewJobTask from './ViewJobTask';
+import ViewJobPopUp from './ViewJobPopUp';
 import './ViewJob.css';
 import { AppContext } from '../../AppContext';
 import rectangle from '../../../images/rectangle.png';
@@ -29,6 +31,8 @@ const ViewJob = () => {
     const [members, setMembers] = useState([]);
     const [windowNames, setWindowNames] = useState([]);
     const [windowsOpen, setWindowsOpen] = useState(true);
+    const [showPopUp, setShowPopUp] = useState(false); // For controlling the modal visibility
+    const [selectedTask, setSelectedTask] = useState(null);
     const navigate = useNavigate();
 
     const fetchProjectData = async () => {
@@ -176,6 +180,26 @@ const ViewJob = () => {
         });
     };
 
+    const handleImageClick = (task) => {
+        if (!windowsOpen) {
+            console.log('Task selected:', task);
+            setSelectedTask(task);
+            setShowPopUp(true);
+        }
+    };
+    
+    
+
+    const handleClosePopUp = () => {
+        console.log('Closing ViewJobPopUp');
+        setShowPopUp(false); // Close the modal
+        setSelectedTask(null); // Clear the selected task
+    };
+
+    const handleTaskAdd = async () => {
+        await fetchProjectData(); // Fetch the updated project data
+    };
+    
 
     return (
         <div>
@@ -183,7 +207,7 @@ const ViewJob = () => {
                 <button className="back-btn" onClick={() => navigate(-1)}>
                     Back
                 </button>
-                <TaskPopUp />
+                <ViewJobTask onTaskAdd={handleTaskAdd} />
             </div>
             <div className="tasks-container">
                 <div className="nav">
@@ -224,7 +248,11 @@ const ViewJob = () => {
                                 <ul>
                                     {tasks.map((task, idx) => (
                                         <li key={task.task_id} className="shape-item">
-                                            <div className="shape-container">
+                                            <div 
+                                                className="shape-container"
+                                                onClick={() => handleImageClick(task)}
+                                                style={{ cursor: !windowsOpen ? 'pointer' : 'default' }}
+                                            >
                                                 <img src={shapeImages[task.shape_name]} alt={`Selected Shape ${task.shape_name}`} />
                                             </div>
                                             <div className="shape-details">
@@ -284,6 +312,15 @@ const ViewJob = () => {
                     </div>
                 )}
             </div>
+            {showPopUp && (
+                <>
+                    <ViewJobPopUp 
+                        task={selectedTask} 
+                        members={members} 
+                        onClose={handleClosePopUp} 
+                    />
+                </>
+            )}
         </div>
 
     );

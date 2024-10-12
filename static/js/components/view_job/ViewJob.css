@@ -351,3 +351,18 @@
 .add-members-link:hover {
     text-decoration: underline;
 }
+
+/* POP UP */
+
+.assign-btn {
+    color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.assign-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
