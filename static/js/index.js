@@ -32,13 +32,10 @@ function App() {
                 <Route path="/project/:projectId" element={<Tasks />} />
                 <Route path="/project/:projectId/view_job" element={<ViewJob />} />
                 <Route path="/project/:projectId/edit_pname" element={<EditPname />} />
-<<<<<<< HEAD
                 <Route path="/project/:projectId/viewjobpopup" element={<ViewJobPopUp />} />
-=======
                 <Route path="/reset_password" element={<ResetPassword />} />
                 <Route path="/send_link" element={<SendLink />} />
                 <Route path="/reset_password_complete" element={<ResetNewPassword />} />
->>>>>>> 39af6a90f53a4dd5e55499ee7602eb3415d5aded
 
             </Routes>
         </Router>

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
-import TaskPopUp from '../tasks/TaskPopUp';
+// import TaskPopUp from '../tasks/TaskPopUp';
+import ViewJobTask from './ViewJobTask';
 import ViewJobPopUp from './ViewJobPopUp';
 import './ViewJob.css';
 import { AppContext } from '../../AppContext';
@@ -194,6 +195,10 @@ const ViewJob = () => {
         setShowPopUp(false); // Close the modal
         setSelectedTask(null); // Clear the selected task
     };
+
+    const handleTaskAdd = async () => {
+        await fetchProjectData(); // Fetch the updated project data
+    };
     
 
     return (
@@ -202,7 +207,7 @@ const ViewJob = () => {
                 <button className="back-btn" onClick={() => navigate(-1)}>
                     Back
                 </button>
-                <TaskPopUp />
+                <ViewJobTask onTaskAdd={handleTaskAdd} />
             </div>
             <div className="tasks-container">
                 <div className="nav">
