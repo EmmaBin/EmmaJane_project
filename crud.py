@@ -81,14 +81,38 @@ def create_userproject(user_id, project_id):
     return UserProject(user_id=user_id, project_id=project_id)
 
 
-def get_projects_by_user_id(user_id):
-    """Return all projects of a user id"""
+# def get_projects_by_user_id(user_id):
+#     """Return all projects of a user id"""
 
-    user_projects = UserProject.query.filter(
-        UserProject.user_id == user_id).all()
-    projects = [user_project.project for user_project in user_projects]
+#     user_projects = UserProject.query.filter(
+#         UserProject.user_id == user_id).all()
+#     projects = [user_project.project for user_project in user_projects]
 
-    return [project.to_dict() for project in projects]
+#     return [project.to_dict() for project in projects]
+
+
+def get_current_and_previous_projects_by_user_id(user_id):
+    """Fetch current and previous projects associated with a user."""
+
+    # Query all projects associated with the user
+    projects = db.session.query(Project).join(
+        UserProject).filter(UserProject.user_id == user_id).all()
+
+    # Add logging to see all fetched projects
+    print(f"All Projects for user {user_id}: {projects}")
+
+    # Separate current and previous projects
+    current_projects = [
+        project for project in projects if not project.completed]
+    previous_projects = [project for project in projects if project.completed]
+
+    # Debugging output for current and previous projects
+    print(f"Current Projects for user {user_id}: {current_projects}")
+    print(f"Previous Projects for user {user_id}: {previous_projects}")
+
+    return current_projects, previous_projects
+
+    return current_projects, previous_projects
 
 
 # USERTASK-RELATED
@@ -101,21 +125,22 @@ def get_tasks_by_project_id(project_id):
     # return {task.task_id: task.to_dict() for task in tasks}
     return [task.to_dict() for task in tasks]
 
+
 def assign_member_to_task(user_id, task_id):
     """Assign a member (user) to a task."""
-    
+
     # Check if the user is already assigned to the task
     # existing_assignment = UserTask.query.filter_by(user_id=user_id, task_id=task_id).first()
-    
+
     # if existing_assignment:
     #     return {'error': 'User is already assigned to this task'}
-    
+
     # Create a new assignment
     user_task = UserTask(user_id=user_id, task_id=task_id)
-    
+
     db.session.add(user_task)
     db.session.commit()
-    
+
     return user_task
 
 # Task-related

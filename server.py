@@ -62,6 +62,7 @@ def login():
         if user.password == password:
 
             session['user'] = user.user_id
+            db.session.commit()
 
             return jsonify({
                 "id": user.user_id,
@@ -220,37 +221,56 @@ def upload_image():
 @app.route("/dashboard", methods=['GET'])
 def profile():
     """Profile"""
+    try:
+        user_id = session.get('user')
 
-    user_id = session.get('user')
+        if not user_id:
+            return jsonify({"error": "Unauthorized"}), 401
 
-    if user_id:
+        # Fetch the user and their current and previous projects
         user = crud.get_user_by_id(user_id)
-        projects = crud.get_projects_by_user_id(user_id)
+        if not user:
+            print(f"User with id {user_id} not found.")
+            return jsonify({"error": "User not found"}), 404
 
-        if user:
+        current_projects, previous_projects = crud.get_current_and_previous_projects_by_user_id(
+            user_id)
 
-            curr_projects_data = [
-                {
-                    "id": project["project_id"],
-                    "pname": project["pname"],
-                    "address": project["address"]
-                }
-                for project in projects
-            ]
+        # Debugging logs for empty projects
+        if not current_projects and not previous_projects:
+            print(f"User {user_id} has no current or previous projects.")
 
-            return jsonify({
-                "id": user.user_id,
-                "fname": user.fname,
-                "lname": user.lname,
-                "email": user.email,
-                "team": user.team,
-                "role": user.role,
-                "profileImage": user.profile_image,
-                "current_projects": curr_projects_data
-                # "previous_projects": user.previous_projects  # Assuming these fields exist - will likely need to add "completion status" to model.py
-            }), 200
+        # Prepare response data
+        curr_projects_data = [
+            {"id": project.project_id, "pname": project.pname,
+                "address": project.address}
+            for project in current_projects
+        ]
 
-    return jsonify({"error": "Unauthorized"}), 401
+        prev_projects_data = [
+            {"id": project.project_id, "pname": project.pname,
+                "address": project.address}
+            for project in previous_projects
+        ]
+
+        return jsonify({
+            "id": user.user_id,
+            "fname": user.fname,
+            "lname": user.lname,
+            "email": user.email,
+            "team": user.team,
+            "role": user.role,
+            "profileImage": user.profile_image,
+            "current_projects": curr_projects_data,
+            "previous_projects": prev_projects_data
+        }), 200
+
+    except Exception as e:
+        # Log the error and rollback the session
+        print(
+            f"Error occurred while fetching dashboard for user {user_id}: {e}")
+        db.session.rollback()  # Rollback the session on error
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/team_members", methods=['GET'])
@@ -293,66 +313,97 @@ def delete_project_member(project_id, member_id):
 def add_project():
     """Create userproject instance"""
 
-    pname = request.json.get('pname')
-    address = request.json.get('address')
+    try:
+        pname = request.json.get('pname')
+        address = request.json.get('address')
 
-    if not pname or not address:
-        return jsonify({"error": "pname and address are required"}), 400
+        if not pname or not address:
+            return jsonify({"error": "pname and address are required"}), 400
 
-    project = crud.create_new_project(pname, address)
-    db.session.add(project)
-    db.session.commit()
+        # Create the project
+        project = crud.create_new_project(pname, address)
+        db.session.add(project)
+        db.session.commit()  # Commit here to ensure project is saved before adding members
 
-    members = request.json.get('members')
-    userprojects = []
+        print(f"Project created: {project.to_dict()}")
 
-    if members:
-        for member in members:
-            user_id = member.get('user_id')
-            if user_id:
-                userproject = crud.create_userproject(
-                    user_id, project.project_id)
-                db.session.add(userproject)
-                userprojects.append(userproject)
-            else:
-                print(f"Member without user_id: {member}")
-    # for member in members:
-    #     user_id = member.get('user_id')
-    #     userproject = crud.create_userproject(user_id, project.project_id)
-    #     db.session.add(userproject)
-    #     userprojects.append(userproject)
+        # Add members to the project
+        members = request.json.get('members')
+        userprojects = []
 
-    db.session.commit()
+        if members:
+            for member in members:
+                user_id = member.get('user_id')
+                if user_id:
+                    userproject = crud.create_userproject(
+                        user_id, project.project_id)
+                    db.session.add(userproject)
+                    userprojects.append(userproject)
+                    print(
+                        f"UserProject created for user {user_id} in project {project.project_id}")
+                else:
+                    print(f"Member without user_id: {member}")
+            db.session.commit()  # Commit members after all are added
+        else:
+            print("No members provided for the project")
 
-    return jsonify({"project_id": project.project_id}), 201
+        return jsonify({"project_id": project.project_id}), 201
+
+    except Exception as e:
+        db.session.rollback()  # Roll back in case of error
+        print(f"Error occurred while creating project: {e}")
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route('/project/<project_id>', methods=['GET'])
 def get_tasks(project_id):
     """Tasks Page"""
+    try:
+        # Fetch tasks for the given project_id
+        tasks = crud.get_tasks_by_project_id(project_id)
+        if not tasks:
+            print(f"No tasks found for project {project_id}")
+        print(f"Tasks: {tasks}")
 
-    tasks = crud.get_tasks_by_project_id(project_id)
-    project_members = crud.get_members_by_project(project_id)
-    project = crud.get_project_by_id(project_id)
+        # Fetch members associated with the project
+        project_members = crud.get_members_by_project(project_id)
+        if not project_members:
+            print(f"No project members found for project {project_id}")
+        print(f"Project members: {project_members}")
 
-    tasks_list = [{
-        "task_id": task["task_id"],
-        "tname": task["tname"],
-        "date_assigned": task["date_assigned"],
-        "status": task["status"],
-        "shape_name": task["shape_name"]
-    } for task in tasks]
+        # Fetch the project details
+        project = crud.get_project_by_id(project_id)
+        if not project:
+            print(f"Project with id {project_id} not found")
+            return jsonify({"error": "Project not found"}), 404
+        print(f"Project: {project}")
 
-    members_list = [{
-        "id": user["user_id"],
-        "fname": user["fname"],
-        "lname": user["lname"],
-        "email": user["email"],
-        "team": user["team"],
-        "role": user["role"]
-    } for user in project_members]
+        tasks_list = [{
+            "task_id": task["task_id"],
+            "tname": task["tname"],
+            "date_assigned": task["date_assigned"],
+            "status": task["status"],
+            "shape_name": task["shape_name"]
+        } for task in tasks]
 
-    return jsonify({"tasks": tasks_list, "members": members_list, "project": project.to_dict()}), 200
+        members_list = [{
+            "id": user["user_id"],
+            "fname": user["fname"],
+            "lname": user["lname"],
+            "email": user["email"],
+            "team": user["team"],
+            "role": user["role"]
+        } for user in project_members]
+
+        return jsonify({
+            "tasks": tasks_list,
+            "members": members_list,
+            "project": project.to_dict()
+        }), 200
+
+    except Exception as e:
+        print(f"Error occurred while fetching project {project_id}: {e}")
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route('/project/<int:project_id>', methods=['PUT'])
@@ -380,28 +431,43 @@ def add_project_tasks(project_id):
         return jsonify({"error": "Project not found"}), 404
 
     tasks_data = data.get('tasks', [])
+    if not tasks_data:
+        # Validate that tasks are provided
+        return jsonify({"error": "No tasks data provided"}), 400
+
     tasks_created = []
     try:
         for task_data in tasks_data:
+            # Validate task fields
+            tname = task_data.get('name')
+            status = task_data.get('status', 'Not Started')
+            shape_name = task_data.get('shapeName')
+
+            if not tname:
+                return jsonify({"error": "Task name is required"}), 400
+
+            if not shape_name:
+                return jsonify({"error": "Task shape_name is required"}), 400
+
             # Create task object using CRUD function
             task = crud.create_task_object(
-                tname=task_data.get('name'),
-                status=task_data.get('status', 'Not Started'),
+                tname=tname,
+                status=status,
                 project_id=project_id,
-                shape_name=task_data.get('shapeName'),
+                shape_name=shape_name,
                 date_assigned=datetime.now(),
-                contact_info=task_data.get('contact_info') or "No contact info"
+                contact_info=task_data.get('contact_info', "No contact info")
             )
             db.session.add(task)  # Add the task object to the session
-            db.session.commit()
             tasks_created.append(task.to_dict())
-            print(f'Task created------------------------: {task.to_dict()}')
-            print(project_id)
+            print(f'Task created: {task.to_dict()} for project {project_id}')
 
-        # Commit all changes at once
+        # Commit all tasks at once after adding them to the session
+        db.session.commit()
 
     except Exception as e:
         db.session.rollback()  # Roll back in case of error
+        print(f"Error occurred: {e}")  # Log the error for debugging
         return jsonify({"error": str(e)}), 500
 
     return jsonify({"message": "Tasks added successfully", "tasks": tasks_created, "project_id": project_id}), 201
@@ -425,7 +491,6 @@ def delete_task_route(project_id, task_id):
     return jsonify({"error": "Task not found"}), 404
 
 
-
 # Assign Team Member to Job
 
 @app.route('/assign_job', methods=['POST'])
@@ -440,11 +505,12 @@ def assign_member_to_job():
         return jsonify({"error": "Job ID and member ID are required"}), 400
 
     try:
-        crud.assign_member_to_task(user_id, task_id)  # Make sure this function handles errors
+        # Make sure this function handles errors
+        crud.assign_member_to_task(user_id, task_id)
         return jsonify({"success": True, "message": "Member assigned to job successfully"}), 200
     except Exception as e:
-        return jsonify({"error": str(e)}), 500  # Return error details in case of exception
-
+        # Return error details in case of exception
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == "__main__":
