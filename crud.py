@@ -101,21 +101,22 @@ def get_tasks_by_project_id(project_id):
     # return {task.task_id: task.to_dict() for task in tasks}
     return [task.to_dict() for task in tasks]
 
+
 def assign_member_to_task(user_id, task_id):
     """Assign a member (user) to a task."""
-    
+
     # Check if the user is already assigned to the task
     # existing_assignment = UserTask.query.filter_by(user_id=user_id, task_id=task_id).first()
-    
+
     # if existing_assignment:
     #     return {'error': 'User is already assigned to this task'}
-    
+
     # Create a new assignment
     user_task = UserTask(user_id=user_id, task_id=task_id)
-    
+
     db.session.add(user_task)
     db.session.commit()
-    
+
     return user_task
 
 # Task-related
@@ -163,6 +164,16 @@ def delete_task(task_id):
         db.session.delete(task)
         db.session.commit()
         return task
+    return None
+
+
+def update_user_password(user_id, new_password):
+    """Update the password for a specific user."""
+    user = get_user_by_id(user_id)
+    if user:
+        user.password = new_password
+        db.session.commit()
+        return user
     return None
 
 

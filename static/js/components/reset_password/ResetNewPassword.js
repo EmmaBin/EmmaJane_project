@@ -14,13 +14,20 @@ const ResetNewPassword = () => {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     useEffect(() => {
-        console.log('ResetNewPassword component has mounted');
+        console.log('ResetNewPassword component has mounted, token:', token);
     }, []);
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null);
         setMessage(null);
+
+        if (password.length < 8) {
+            setError('Password must be at least 8 characters long.');
+            return;
+        }
+
 
         if (password !== confirmPassword) {
             setError('Passwords do not match.');
