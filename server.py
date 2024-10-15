@@ -179,8 +179,8 @@ def reset_password(token):
             if not new_password:
                 return jsonify({'error': 'Password cannot be empty.'}), 400
 
-            user.set_password(new_password)
-            return jsonify({'success': True, 'message': 'Password has been updated successfully.'}), 200
+            crud.update_user_password(user_id, new_password)
+            return jsonify({'success': True, 'message': 'Password has been updated successfully!***********************'}), 200
 
         return redirect("/reset_password_complete/"+f"{token}")
 
