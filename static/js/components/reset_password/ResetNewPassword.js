@@ -1,7 +1,7 @@
-console.log('NewPassword component is mounting');
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { PiEye, PiEyeClosed } from "react-icons/pi";
+import './ResetNewPassword.css';
 
 const ResetNewPassword = () => {
     const { token } = useParams();
@@ -10,9 +10,12 @@ const ResetNewPassword = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState(null);
     const [message, setMessage] = useState(null);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-
-
+    useEffect(() => {
+        console.log('ResetNewPassword component has mounted');
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -46,33 +49,54 @@ const ResetNewPassword = () => {
         }
     };
 
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
 
+    const toggleConfirmPasswordVisibility = () => {
+        setShowConfirmPassword(!showConfirmPassword);
+    };
 
     return (
-        <div>
-            <h2>Reset Password</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            {message && <p style={{ color: 'green' }}>{message}</p>}
+        <div className="reset-password-container">
+            <h2>Reset password</h2>
+            {error && <p className="error-message">{error}</p>}
+            {message && <p className="success-message">{message}</p>}
 
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Enter new password"
-                    required
-                />
-                <input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Confirm new password"
-                    required
-                />
-                <button type="submit">Reset Password</button>
+            <form onSubmit={handleSubmit} className="reset-password-form">
+                <div className="input-container">
+                    <label>Password</label>
+                    <div className="input-wrapper">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                        <span onClick={togglePasswordVisibility} className="icon">
+                            {showPassword ? <PiEyeClosed /> : <PiEye />}
+                        </span>
+                    </div>
+                </div>
+                <div className="input-container">
+                    <label>Confirm password</label>
+                    <div className="input-wrapper">
+                        <input
+                            type={showConfirmPassword ? "text" : "password"}
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            required
+                        />
+                        <span onClick={toggleConfirmPasswordVisibility} className="icon">
+                            {showConfirmPassword ? <PiEyeClosed /> : <PiEye />}
+                        </span>
+                    </div>
+                </div>
+                <button type="submit" className="submit-btn">Save</button>
             </form>
         </div>
     );
 };
 
 export default ResetNewPassword;
+
