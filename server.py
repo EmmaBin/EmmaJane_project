@@ -179,10 +179,10 @@ def reset_password(token):
             if not new_password:
                 return jsonify({'error': 'Password cannot be empty.'}), 400
 
-            user.set_password(new_password)
-            return jsonify({'success': True, 'message': 'Password has been updated successfully.'}), 200
+            crud.update_user_password(user_id, new_password)
+            return jsonify({'success': True, 'message': 'Password has been updated successfully!***********************'}), 200
 
-        return redirect("/reset_password_complete")
+        return redirect("/reset_password_complete/"+f"{token}")
 
     except JoseError as e:
 
@@ -190,6 +190,11 @@ def reset_password(token):
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+@app.route("/reset_password_complete/<token>", methods=['GET'])
+def reset_password_complete(token):
+    return render_template("homepage.html")
 
 
 # Upload profile photos
@@ -425,7 +430,6 @@ def delete_task_route(project_id, task_id):
     return jsonify({"error": "Task not found"}), 404
 
 
-
 # Assign Team Member to Job
 
 @app.route('/assign_job', methods=['POST'])
@@ -440,11 +444,12 @@ def assign_member_to_job():
         return jsonify({"error": "Job ID and member ID are required"}), 400
 
     try:
-        crud.assign_member_to_task(user_id, task_id)  # Make sure this function handles errors
+        # Make sure this function handles errors
+        crud.assign_member_to_task(user_id, task_id)
         return jsonify({"success": True, "message": "Member assigned to job successfully"}), 200
     except Exception as e:
-        return jsonify({"error": str(e)}), 500  # Return error details in case of exception
-
+        # Return error details in case of exception
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == "__main__":

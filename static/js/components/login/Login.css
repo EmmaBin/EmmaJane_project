@@ -43,7 +43,9 @@ input {
     width: 300px;
 }
 
+/* edit this part to make the input field same length as password */
 input.email {
+    width: 400px;
     margin-bottom: 25px;
 }
 

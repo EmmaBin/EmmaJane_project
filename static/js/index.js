@@ -35,7 +35,7 @@ function App() {
                 <Route path="/project/:projectId/viewjobpopup" element={<ViewJobPopUp />} />
                 <Route path="/reset_password" element={<ResetPassword />} />
                 <Route path="/send_link" element={<SendLink />} />
-                <Route path="/reset_password_complete" element={<ResetNewPassword />} />
+                <Route path="/reset_password_complete/:token" element={<ResetNewPassword />} />
 
             </Routes>
         </Router>
