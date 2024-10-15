@@ -1,15 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useLocation, useParams, useNavigate } from 'react-router-dom';
-import TaskPopUp from '../tasks/TaskPopUp';
-import './ViewJob.css';
-import { AppContext } from '../../AppContext';
-import { MdModeEdit } from "react-icons/md";
+// ASSIGN MEMBER TO TASK
 
+import React, { useContext, useEffect, useState } from 'react';
+import './ViewJob.css';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import { IoMdArrowDropdown } from "react-icons/io";
 
 const style = {
     position: 'absolute',
@@ -40,6 +36,7 @@ const ViewJobPopUp = ({ task, members = [], onClose }) => {
     };
 
     const isChecked = (userId) => {
+        console.log('Task is', task);
         return checkedMember.some((m) => m.id === userId);
     };
 

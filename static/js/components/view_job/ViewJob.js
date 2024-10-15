@@ -185,16 +185,27 @@ const ViewJob = () => {
             console.log('Task selected:', task);
             setSelectedTask(task);
             setShowPopUp(true);
+            navigate(`/project/${projectId}/${task.task_id}`, {
+                state: {
+                    // dateAssigned: task.date_assigned,
+                    // tname: task.tname,
+                    // shapeName: task.shape_name,
+                    // status: task.status,
+                    // taskId: task.task_id,
+                    task: task,
+                    members: members
+                }
+            });
         }
     };
     
     
 
-    const handleClosePopUp = () => {
-        console.log('Closing ViewJobPopUp');
-        setShowPopUp(false); // Close the modal
-        setSelectedTask(null); // Clear the selected task
-    };
+    // const handleClosePopUp = () => {
+    //     console.log('Closing ViewJobPopUp');
+    //     setShowPopUp(false); // Close the modal
+    //     setSelectedTask(null); // Clear the selected task
+    // };
 
     const handleTaskAdd = async () => {
         await fetchProjectData(); // Fetch the updated project data
@@ -312,7 +323,7 @@ const ViewJob = () => {
                     </div>
                 )}
             </div>
-            {showPopUp && (
+            {/* {showPopUp && (
                 <>
                     <ViewJobPopUp 
                         task={selectedTask} 
@@ -320,7 +331,7 @@ const ViewJob = () => {
                         onClose={handleClosePopUp} 
                     />
                 </>
-            )}
+            )} */}
         </div>
 
     );

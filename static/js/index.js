@@ -13,7 +13,8 @@ import NewProject from './components/add_new_project/NewProject';
 import Tasks from './components/tasks/Tasks';
 import ViewJob from './components/view_job/ViewJob';
 import EditPname from './components/tasks/EditPname';
-import ViewJobPopUp from './components/view_job/ViewJobPopUp';
+// import ViewJobPopUp from './components/view_job/ViewJobPopUp';
+import ViewJobStatus from './components/view_job/ViewJobStatus';
 import { AppProvider } from './AppContext';
 import ResetPassword from './components/reset_password/Reset';
 import SendLink from './components/reset_password/SendLink';
@@ -32,7 +33,7 @@ function App() {
                 <Route path="/project/:projectId" element={<Tasks />} />
                 <Route path="/project/:projectId/view_job" element={<ViewJob />} />
                 <Route path="/project/:projectId/edit_pname" element={<EditPname />} />
-                <Route path="/project/:projectId/viewjobpopup" element={<ViewJobPopUp />} />
+                <Route path="/project/:projectId/:taskId" element={<ViewJobStatus />} />
                 <Route path="/reset_password" element={<ResetPassword />} />
                 <Route path="/send_link" element={<SendLink />} />
                 <Route path="/reset_password_complete" element={<ResetNewPassword />} />

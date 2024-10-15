@@ -1,3 +1,5 @@
+// ADD WINDOW FEATURE
+
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Box from '@mui/material/Box';
