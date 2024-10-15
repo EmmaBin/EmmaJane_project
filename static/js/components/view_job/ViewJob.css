@@ -379,7 +379,10 @@
 /* STATUS */
 
 .assign-job {
-    width: 80%;
+    width: 100%; /* Allow full width */
+    display: flex; /* This allows children to be flex items */
+    flex-direction: column; /* Arrange items in a column */
+    align-items: stretch;
 }
 
 .search-name {
@@ -411,4 +414,23 @@
     padding: 5px;
     transform: rotate(45deg);
     transition: transform 0.3s ease;
+}
+
+.status-btn {
+    margin-top: 40px;
+    padding: 10px 15px;
+    background-color: #DBE0E6;
+    color: #077EE8;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    align-self: flex-start;
+    margin-left: 0;
+    width: 100%;
+}
+
+.status-btn:hover {
+    background-color: #3591f3;
 }

@@ -52,7 +52,7 @@ const ViewJobStatus = () => {
         }
     };
 
-    // const fetchProjectData = async () => {
+    // const fetchTaskData = async () => {
     //     try {
     //         console.log(`Fetching project data for project ID: ${projectId}`);
     //         const response = await fetch(`/project/${projectId}`);
@@ -99,26 +99,52 @@ const ViewJobStatus = () => {
             <div className="tasks-container">
                 <div className="header">
                     <h2>{task.tname}</h2>
-                </div>
-                <div className="shape-container" style={{ backgroundColor: getBackgroundColor(task.status) }}>
-                    <img src={shapeImages[task.shape_name]} alt={`Selected Shape ${task.shape_name}`} />
+                    <div className="shape-container" style={{ backgroundColor: getBackgroundColor(task.status) }}>
+                        <img src={shapeImages[task.shape_name]} alt={`Selected Shape ${task.shape_name}`} />
+                    </div>
+                    <button
+                        className="status-btn"
+                    >
+                        Start
+                    </button>
                 </div>
                 <div className="assign-job">
                     <div className="search-name">
-                        {members && members.length > 0 ? (
-                            members.map((member, index) => (
-                                <div key={index} className="member-item">
-                                    {member.name} {/* Display the member's name */}
-                                </div>
-                            ))
-                        ) : (
-                            <summary className="summary-container" onClick={handleSearchNameClick}>
+                        <summary className="summary-container" onClick={handleSearchNameClick}>
                                 <div className='summary-title'>Search Name</div>
                                 <span className="project-arrow"></span>
                             </summary>
-                        )}
                     </div>
                 </div>
+                <form 
+                    // onSubmit={handleLogin}
+                >
+                    <div>
+                        <div>
+                            <label>Date assigned</label>
+                        </div>
+                        <input
+                            type="text"
+                            id="date_assigned"
+                            name="date_assigned"
+                            placeholder="Enter date to start"
+                            aria-label="Date assigned"
+                        />
+                    </div>
+                    <div>
+                        <div>
+                            <label>Comments</label>
+                        </div>
+                            <input
+                                type="text"
+                                id="comment"
+                                name="comment"
+                                placeholder="Add a comment..."
+                                aria-label="Comment"
+                            />
+                    </div>
+                    <button type="submit" className="status-btn">Post</button>
+                </form>
             </div>
 
             {showPopUp && 
